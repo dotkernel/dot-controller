@@ -110,7 +110,7 @@ Note: Each of these plugins requires the associated ZE packages to be installed 
 Although these are optional, if a package is missing, the controller will not have the associated functionality available
 
 - `template` wraps TemplateInterface provided by ZE, to make template engine accessible to any controller
-- `urlHelper` wraps the UrlHelper class provided by ZE helpers package. Used to generate URIs from routes
+- `url` wraps the UrlHelper class provided by ZE helpers package. Used to generate URIs from routes
 
 ### Writing custom controller plugins
 
