@@ -24,12 +24,12 @@
   },
   "autoload": {
     "psr-4": {
-      "DotKernel\\DotController\\": "src/"
+      "Dot\\Controller\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "DotKernelTest\\DotController\\": "test/"
+      "DotTest\\Controller\\": "test/"
     }
   },
   "extra": {

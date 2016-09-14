@@ -7,11 +7,11 @@
  * Time: 8:24 PM
  */
 
-namespace DotKernel\DotController\Exception;
+namespace Dot\Controller\Exception;
 
 /**
  * Class RuntimeException
- * @package DotKernel\DotController\Exception
+ * @package Dot\Controller\Exception
  */
 class RuntimeException extends \RuntimeException implements ExceptionInterface
 {

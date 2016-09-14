@@ -7,13 +7,13 @@
  * Time: 8:24 PM
  */
 
-namespace DotKernel\DotController\Plugin;
+namespace Dot\Controller\Plugin;
 
 use Zend\Expressive\Template\TemplateRendererInterface;
 
 /**
  * Class TemplatePlugin
- * @package DotKernel\DotController\Plugin
+ * @package Dot\Controller\Plugin
  */
 class TemplatePlugin implements PluginInterface
 {

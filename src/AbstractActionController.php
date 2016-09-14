@@ -7,13 +7,13 @@
  * Time: 8:24 PM
  */
 
-namespace DotKernel\DotController;
+namespace Dot\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class AbstractActionController
- * @package DotKernel\DotController
+ * @package Dot\Controller
  */
 class AbstractActionController extends AbstractController
 {

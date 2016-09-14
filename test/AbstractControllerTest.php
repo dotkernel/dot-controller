@@ -7,11 +7,11 @@
  * Time: 8:24 PM
  */
 
-namespace DotKernelTest\DotController;
+namespace DotTest\Controller;
 
 /**
  * Class AbstractControllerTest
- * @package DotKernelTest\DotController
+ * @package DotTest\Controller
  */
 class AbstractControllerTest extends \PHPUnit_Framework_TestCase
 {

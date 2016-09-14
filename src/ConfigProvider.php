@@ -7,15 +7,15 @@
  * Time: 8:24 PM
  */
 
-namespace DotKernel\DotController;
+namespace Dot\Controller;
 
-use DotKernel\DotController\Factory\PluginManagerAwareInitializer;
-use DotKernel\DotController\Factory\PluginManagerFactory;
-use DotKernel\DotController\Plugin\PluginManager;
+use Dot\Controller\Factory\PluginManagerAwareInitializer;
+use Dot\Controller\Factory\PluginManagerFactory;
+use Dot\Controller\Plugin\PluginManager;
 
 /**
  * Class ConfigProvider
- * @package DotKernel\DotController
+ * @package Dot\Controller
  */
 class ConfigProvider
 {

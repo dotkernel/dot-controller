@@ -7,13 +7,13 @@
  * Time: 8:24 PM
  */
 
-namespace DotKernel\DotController\Plugin;
+namespace Dot\Controller\Plugin;
 
 use Zend\ServiceManager\AbstractPluginManager;
 
 /**
  * Class PluginManager
- * @package DotKernel\DotController\Plugin
+ * @package Dot\Controller\Plugin
  */
 class PluginManager extends AbstractPluginManager
 {

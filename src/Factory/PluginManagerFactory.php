@@ -7,18 +7,18 @@
  * Time: 8:24 PM
  */
 
-namespace DotKernel\DotController\Factory;
+namespace Dot\Controller\Factory;
 
-use DotKernel\DotController\Plugin\PluginManager;
-use DotKernel\DotController\Plugin\TemplatePlugin;
-use DotKernel\DotController\Plugin\UrlHelperPlugin;
+use Dot\Controller\Plugin\PluginManager;
+use Dot\Controller\Plugin\TemplatePlugin;
+use Dot\Controller\Plugin\UrlHelperPlugin;
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Helper\UrlHelper;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
 /**
  * Class PluginManagerFactory
- * @package DotKernel\DotController\Factory
+ * @package Dot\Controller\Factory
  */
 class PluginManagerFactory
 {

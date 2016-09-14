@@ -7,16 +7,16 @@
  * Time: 8:24 PM
  */
 
-namespace DotKernel\DotController;
+namespace Dot\Controller;
 
-use DotKernel\DotController\Plugin\PluginManager;
-use DotKernel\DotController\Plugin\PluginManagerAwareInterface;
+use Dot\Controller\Plugin\PluginManager;
+use Dot\Controller\Plugin\PluginManagerAwareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class AbstractController
- * @package DotKernel\DotController
+ * @package Dot\Controller
  */
 abstract class AbstractController implements PluginManagerAwareInterface
 {

@@ -7,11 +7,11 @@
  * Time: 8:24 PM
  */
 
-namespace DotKernel\DotController\Plugin;
+namespace Dot\Controller\Plugin;
 
 /**
  * Interface PluginManagerAwareInterface
- * @package DotKernel\DotController\Plugin
+ * @package Dot\Controller\Plugin
  */
 interface PluginManagerAwareInterface
 {

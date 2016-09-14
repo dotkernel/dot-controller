@@ -7,16 +7,16 @@
  * Time: 8:24 PM
  */
 
-namespace DotKernel\DotController\Factory;
+namespace Dot\Controller\Factory;
 
-use DotKernel\DotController\Plugin\PluginManager;
-use DotKernel\DotController\Plugin\PluginManagerAwareInterface;
+use Dot\Controller\Plugin\PluginManager;
+use Dot\Controller\Plugin\PluginManagerAwareInterface;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Initializer\InitializerInterface;
 
 /**
  * Class PluginManagerAwareInitializer
- * @package DotKernel\DotController\Factory
+ * @package Dot\Controller\Factory
  */
 class PluginManagerAwareInitializer implements InitializerInterface
 {
