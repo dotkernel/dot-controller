@@ -28,7 +28,7 @@ class PluginManagerFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $pluginManager = new PluginManager($container, $container->get('config')['dk_controller']['plugin_manager']);
+        $pluginManager = new PluginManager($container, $container->get('config')['dot_controller']['plugin_manager']);
 
         //register the built in plugins, if the required component is present
         if ($container->has(UrlHelper::class)) {

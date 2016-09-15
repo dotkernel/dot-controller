@@ -22,7 +22,7 @@ class ConfigProvider
     public function __invoke()
     {
         return [
-            'dk_controller' => [
+            'dot_controller' => [
                 'plugin_manager' => []
             ],
 
