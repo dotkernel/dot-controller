@@ -68,7 +68,7 @@ Then register this controller in the `routes` config(we assume you use FastRoute
 ### Multiple controllers for the same route
 
 Use case: You have defined a controller inside some package, with default actions. You want to add actions that fall into the same controller name(or route name more exactly). You want to do this without extending the controller provided by the package. In this case you can do the following
-- create your own controller, independent of the package's controller which adds or overwrites actions
+- create your own controller, independent of the package's controller which adds more actions
 - ZE lets you define an array of middleware for a route, so you can register this controller before the package's controller
 
 ##### Example
@@ -83,7 +83,7 @@ Use case: You have defined a controller inside some package, with default action
 ```
 
 Now when a request for this route comes in, your controller will run first. Dot Controllers are designed to ignore requests that cannot be matched to one of its methods, so if no action matches, it will call the next middleware, in our case, the second controller. 
-If this is the last controller, and action does not match here, it will go to the default 404 Not found page. There is a simple middleware defined in dk-base that makes sure any request that does not match will be converted explicitly to a 404 error.
+If this is the last controller, and action does not match here, it will go to the default 404 Not found page. There is a simple middleware defined in dot-helpers that makes sure any request that does not match will be converted explicitly to a 404 error.
 
 ## Controller plugins
 
