@@ -33,6 +33,22 @@ abstract class AbstractController implements PluginManagerAwareInterface
     protected $next;
 
     /**
+     * Transform an "action" token into a method name
+     *
+     * @param  string $action
+     * @return string
+     */
+    public static function getMethodFromAction($action)
+    {
+        $method = str_replace(['.', '-', '_'], ' ', $action);
+        $method = ucwords($method);
+        $method = str_replace(' ', '', $method);
+        $method = lcfirst($method);
+        $method .= 'Action';
+        return $method;
+    }
+
+    /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @param callable|null $next
@@ -48,8 +64,9 @@ abstract class AbstractController implements PluginManagerAwareInterface
         $this->next = $next;
 
         return $this->dispatch();
-
     }
+
+    abstract public function dispatch();
 
     /**
      * @return ServerRequestInterface
@@ -74,8 +91,6 @@ abstract class AbstractController implements PluginManagerAwareInterface
     {
         return $this->next;
     }
-
-    public abstract function dispatch();
 
     /**
      * Method overloading: return/call plugins
@@ -125,22 +140,4 @@ abstract class AbstractController implements PluginManagerAwareInterface
         $this->pluginManager = $pluginManager;
         return $this;
     }
-
-    /**
-     * Transform an "action" token into a method name
-     *
-     * @param  string $action
-     * @return string
-     */
-    public static function getMethodFromAction($action)
-    {
-        $method = str_replace(['.', '-', '_'], ' ', $action);
-        $method = ucwords($method);
-        $method = str_replace(' ', '', $method);
-        $method = lcfirst($method);
-        $method .= 'Action';
-        return $method;
-    }
-
-
 }
