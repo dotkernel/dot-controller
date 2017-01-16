@@ -24,7 +24,8 @@ class AbstractActionController extends AbstractController
     {
         $request = $this->request;
         $action = AbstractController::getMethodFromAction(
-            strtolower($request->getAttribute('action', 'index')));
+            strtolower($request->getAttribute('action', 'index'))
+        );
 
         if (method_exists($this, $action)) {
             return $this->$action();
