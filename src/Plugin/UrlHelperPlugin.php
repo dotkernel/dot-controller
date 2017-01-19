@@ -32,24 +32,15 @@ class UrlHelperPlugin implements PluginInterface
     /**
      * @param $routeName
      * @param array $routeParams
-     * @param array $queryParams
-     * @param null $fragmentIdentifier
-     * @param array $options
      * @return string
      */
     public function generate(
         $routeName,
-        array $routeParams = [],
-        array $queryParams = [],
-        $fragmentIdentifier = null,
-        array $options = []
+        array $routeParams = []
     ) {
         return $this->urlHelper->generate(
             $routeName,
-            $routeParams,
-            $queryParams,
-            $fragmentIdentifier,
-            $options
+            $routeParams
         );
     }
 }
