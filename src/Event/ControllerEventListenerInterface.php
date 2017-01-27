@@ -9,12 +9,16 @@
 
 namespace Dot\Controller\Event;
 
+use Zend\EventManager\ListenerAggregateInterface;
+
 /**
  * Interface ActionControllerEventListenerInterface
  * @package Dot\Controller\Event
  */
-interface ControllerEventListenerInterface
+interface ControllerEventListenerInterface extends ListenerAggregateInterface
 {
+    const LISTEN_ALL = 1;
+
     /**
      * @param ControllerEvent $e
      * @return mixed

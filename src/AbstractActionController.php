@@ -32,6 +32,7 @@ abstract class AbstractActionController extends AbstractController
             //trigger an event, and return if the result is a ResponseInterface
             $event = new ControllerEvent(ControllerEvent::EVENT_CONTROLLER_DISPATCH);
             $event->setTarget($this);
+            $event->setParam('method', $action);
             $event->setRequest($this->getRequest());
             $event->setResponse($this->getResponse());
             $event->setNext($this->getNext());
