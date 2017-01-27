@@ -13,13 +13,19 @@ use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerAwareTrait;
 
 /**
  * Class AbstractController
  * @package Dot\Controller
  */
-abstract class AbstractController implements PluginManagerAwareInterface
+abstract class AbstractController implements
+    PluginManagerAwareInterface,
+    EventManagerAwareInterface
 {
+    use EventManagerAwareTrait;
+
     /** @var  PluginManager */
     protected $pluginManager;
 

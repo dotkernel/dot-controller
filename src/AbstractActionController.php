@@ -9,13 +9,14 @@
 
 namespace Dot\Controller;
 
+use Dot\Controller\Event\ControllerEvent;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class AbstractActionController
  * @package Dot\Controller
  */
-class AbstractActionController extends AbstractController
+abstract class AbstractActionController extends AbstractController
 {
     /**
      * @return ResponseInterface
@@ -28,6 +29,21 @@ class AbstractActionController extends AbstractController
         );
 
         if (method_exists($this, $action)) {
+            //trigger an event, and return if the result is a ResponseInterface
+            $event = new ControllerEvent(ControllerEvent::EVENT_CONTROLLER_DISPATCH);
+            $event->setTarget($this);
+            $event->setRequest($this->getRequest());
+            $event->setResponse($this->getResponse());
+            $event->setNext($this->getNext());
+
+            $result = $this->getEventManager()->triggerEventUntil(function ($r) {
+                return ($r instanceof ResponseInterface);
+            }, $event)->last();
+
+            if ($result instanceof ResponseInterface) {
+                return $result;
+            }
+
             return $this->$action();
         }
 
