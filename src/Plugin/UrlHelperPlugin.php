@@ -7,7 +7,7 @@
  * Time: 8:24 PM
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Dot\Controller\Plugin;
 
@@ -39,7 +39,7 @@ class UrlHelperPlugin implements PluginInterface
     public function generate(
         string $routeName,
         array $routeParams = []
-    ) : string {
+    ): string {
         return $this->urlHelper->generate(
             $routeName,
             $routeParams

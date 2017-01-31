@@ -7,7 +7,7 @@
  * Time: 5:21 PM
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Dot\Controller\Event;
 

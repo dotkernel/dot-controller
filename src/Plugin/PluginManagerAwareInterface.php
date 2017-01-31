@@ -7,7 +7,7 @@
  * Time: 8:24 PM
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Dot\Controller\Plugin;
 
@@ -26,5 +26,5 @@ interface PluginManagerAwareInterface
     /**
      * @return PluginManager
      */
-    public function getPluginManager() : PluginManager;
+    public function getPluginManager(): PluginManager;
 }

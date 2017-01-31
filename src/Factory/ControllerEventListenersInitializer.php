@@ -7,7 +7,7 @@
  * Time: 7:29 PM
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Dot\Controller\Factory;
 
@@ -43,7 +43,8 @@ class ControllerEventListenersInitializer implements InitializerInterface
         if (isset($config['event_listeners']) && is_array($config['event_listeners'])) {
             foreach ($config['event_listeners'] as $ctrl => $listeners) {
                 if (get_class($controller) === $ctrl
-                    || $ctrl === ControllerEventListenerInterface::LISTEN_ALL) {
+                    || $ctrl === ControllerEventListenerInterface::LISTEN_ALL
+                ) {
                     if (is_array($listeners)) {
                         foreach ($listeners as $listenerConfig) {
                             if (is_array($listenerConfig)) {
@@ -76,7 +77,7 @@ class ControllerEventListenersInitializer implements InitializerInterface
             $listener = new $listener();
         }
 
-        if (! $listener instanceof ControllerEventListenerInterface) {
+        if (!$listener instanceof ControllerEventListenerInterface) {
             throw new RuntimeException(sprintf(
                 'Controller event listener must be an instance of %s, but %s was provided',
                 ControllerEventListenerInterface::class,

@@ -7,7 +7,7 @@
  * Time: 8:24 PM
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Dot\Controller;
 
@@ -23,7 +23,7 @@ use Zend\ServiceManager\Factory\InvokableFactory;
  */
 class ConfigProvider
 {
-    public function __invoke() : array
+    public function __invoke(): array
     {
         return [
             'dependencies' => $this->getDependenciesConfig(),
@@ -37,7 +37,7 @@ class ConfigProvider
         ];
     }
 
-    public function getDependenciesConfig() : array
+    public function getDependenciesConfig(): array
     {
         return [
             'factories' => [

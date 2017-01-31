@@ -7,7 +7,7 @@
  * Time: 8:24 PM
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Dot\Controller;
 
@@ -23,7 +23,7 @@ abstract class AbstractActionController extends AbstractController
     /**
      * @return ResponseInterface
      */
-    public function dispatch() : ResponseInterface
+    public function dispatch(): ResponseInterface
     {
         $request = $this->request;
         $action = AbstractController::getMethodFromAction(
