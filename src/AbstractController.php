@@ -13,6 +13,7 @@ namespace Dot\Controller;
 
 use Dot\Controller\Event\ControllerEventListenerAwareInterface;
 use Dot\Controller\Event\ControllerEventListenerAwareTrait;
+use Dot\Controller\Plugin\PluginInterface;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -126,9 +127,9 @@ abstract class AbstractController implements
      *
      * @param  string $name Name of plugin to return
      * @param  array $options Options to pass to plugin constructor (if not already instantiated)
-     * @return mixed
+     * @return PluginInterface|callable
      */
-    public function plugin(string $name, array $options = [])
+    public function plugin(string $name, array $options = []) : PluginInterface
     {
         return $this->getPluginManager()->get($name, $options);
     }
