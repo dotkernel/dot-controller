@@ -7,6 +7,8 @@
  * Time: 5:21 PM
  */
 
+declare(strict_types=1);
+
 namespace Dot\Controller\Event;
 
 use Zend\EventManager\ListenerAggregateInterface;
@@ -21,7 +23,6 @@ interface ControllerEventListenerInterface extends ListenerAggregateInterface
 
     /**
      * @param ControllerEvent $e
-     * @return mixed
      */
     public function onDispatch(ControllerEvent $e);
 }

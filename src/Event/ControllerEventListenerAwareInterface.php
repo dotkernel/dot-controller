@@ -7,6 +7,8 @@
  * Time: 5:30 PM
  */
 
+declare(strict_types=1);
+
 namespace Dot\Controller\Event;
 
 /**
@@ -17,18 +19,17 @@ interface ControllerEventListenerAwareInterface
 {
     /**
      * @param ControllerEventListenerInterface $listener
-     * @return mixed
+     * @param $priority
      */
-    public function attachListener(ControllerEventListenerInterface $listener);
+    public function attachListener(ControllerEventListenerInterface $listener, $priority = 1);
 
     /**
      * @param ControllerEventListenerInterface $listener
-     * @return mixed
      */
     public function detachListener(ControllerEventListenerInterface $listener);
 
     /**
-     * @return mixed
+     * Detach and clear all listeners
      */
     public function clearListeners();
 }

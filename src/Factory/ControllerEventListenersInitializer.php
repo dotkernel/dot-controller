@@ -7,6 +7,8 @@
  * Time: 7:29 PM
  */
 
+declare(strict_types=1);
+
 namespace Dot\Controller\Factory;
 
 use Dot\Controller\Event\ControllerEventListenerAwareInterface;
@@ -28,16 +30,29 @@ class ControllerEventListenersInitializer implements InitializerInterface
     public function __invoke(ContainerInterface $container, $instance)
     {
         if ($instance instanceof ControllerEventListenerAwareInterface) {
-            $config = $container->get('config')['dot_controller'];
+            $this->attachControllerListeners($container, $instance);
+        }
+    }
 
-            if (isset($config['event_listeners']) && is_array($config['event_listeners'])) {
-                foreach ($config['event_listeners'] as $controller => $listeners) {
-                    if (get_class($instance) === $controller
-                        || $controller === ControllerEventListenerInterface::LISTEN_ALL) {
-                        $listeners = (array) $listeners;
-                        foreach ($listeners as $listener) {
-                            $listener = $this->getControllerListener($container, $listener);
-                            $instance->attachListener($listener);
+    public function attachControllerListeners(
+        ContainerInterface $container,
+        ControllerEventListenerAwareInterface $controller
+    ) {
+        $config = $container->get('config')['dot_controller'];
+
+        if (isset($config['event_listeners']) && is_array($config['event_listeners'])) {
+            foreach ($config['event_listeners'] as $ctrl => $listeners) {
+                if (get_class($controller) === $ctrl
+                    || $ctrl === ControllerEventListenerInterface::LISTEN_ALL) {
+                    if (is_array($listeners)) {
+                        foreach ($listeners as $listenerConfig) {
+                            if (is_array($listenerConfig)) {
+                                $listener = $listenerConfig['type'] ?? '';
+                                $priority = (int)($listenerConfig['priority'] ?? 1);
+
+                                $listener = $this->getControllerListener($container, $listener);
+                                $controller->attachListener($listener, $priority);
+                            }
                         }
                     }
                 }
@@ -47,10 +62,10 @@ class ControllerEventListenersInitializer implements InitializerInterface
 
     /**
      * @param ContainerInterface $container
-     * @param $listenerName
+     * @param string $listenerName
      * @return mixed
      */
-    protected function getControllerListener(ContainerInterface $container, $listenerName)
+    protected function getControllerListener(ContainerInterface $container, string $listenerName)
     {
         $listener = $listenerName;
         if ($container->has($listener)) {

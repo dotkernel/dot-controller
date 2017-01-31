@@ -7,12 +7,15 @@
  * Time: 8:24 PM
  */
 
+declare(strict_types=1);
+
 namespace Dot\Controller;
 
 use Dot\Controller\Factory\ControllerEventListenersInitializer;
 use Dot\Controller\Factory\PluginManagerAwareInitializer;
 use Dot\Controller\Factory\PluginManagerFactory;
 use Dot\Controller\Plugin\PluginManager;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Class ConfigProvider
@@ -20,7 +23,7 @@ use Dot\Controller\Plugin\PluginManager;
  */
 class ConfigProvider
 {
-    public function __invoke()
+    public function __invoke() : array
     {
         return [
             'dependencies' => $this->getDependenciesConfig(),
@@ -34,16 +37,14 @@ class ConfigProvider
         ];
     }
 
-    public function getDependenciesConfig()
+    public function getDependenciesConfig() : array
     {
         return [
             'factories' => [
                 PluginManager::class => PluginManagerFactory::class,
-            ],
 
-            'initializers' => [
-                PluginManagerAwareInitializer::class,
-                ControllerEventListenersInitializer::class,
+                PluginManagerAwareInitializer::class => InvokableFactory::class,
+                ControllerEventListenersInitializer::class => InvokableFactory::class,
             ],
         ];
     }

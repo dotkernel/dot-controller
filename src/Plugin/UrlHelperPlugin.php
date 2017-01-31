@@ -7,6 +7,8 @@
  * Time: 8:24 PM
  */
 
+declare(strict_types=1);
+
 namespace Dot\Controller\Plugin;
 
 use Zend\Expressive\Helper\UrlHelper;
@@ -30,14 +32,14 @@ class UrlHelperPlugin implements PluginInterface
     }
 
     /**
-     * @param $routeName
+     * @param string $routeName
      * @param array $routeParams
      * @return string
      */
     public function generate(
-        $routeName,
+        string $routeName,
         array $routeParams = []
-    ) {
+    ) : string {
         return $this->urlHelper->generate(
             $routeName,
             $routeParams

@@ -7,6 +7,8 @@
  * Time: 5:31 PM
  */
 
+declare(strict_types=1);
+
 namespace Dot\Controller\Event;
 
 use Zend\EventManager\EventManagerAwareTrait;
@@ -25,18 +27,15 @@ trait ControllerEventListenerAwareTrait
     /**
      * @param ControllerEventListenerInterface $listener
      * @param int $priority
-     * @return $this
      */
     public function attachListener(ControllerEventListenerInterface $listener, $priority = 1)
     {
         $listener->attach($this->getEventManager(), $priority);
         $this->listeners[] = $listener;
-        return $this;
     }
 
     /**
      * @param ControllerEventListenerInterface $listener
-     * @return $this
      */
     public function detachListener(ControllerEventListenerInterface $listener)
     {
@@ -49,11 +48,10 @@ trait ControllerEventListenerAwareTrait
             $idx++;
         }
         unset($this->listeners[$idx]);
-        return $this;
     }
 
     /**
-     * @return $this
+     * Detach listeners and clear them
      */
     public function clearListeners()
     {
@@ -61,6 +59,5 @@ trait ControllerEventListenerAwareTrait
             $listener->detach($this->getEventManager());
         }
         $this->listeners = [];
-        return $this;
     }
 }

@@ -7,6 +7,8 @@
  * Time: 8:24 PM
  */
 
+declare(strict_types=1);
+
 namespace Dot\Controller;
 
 use Dot\Controller\Event\ControllerEvent;
@@ -21,7 +23,7 @@ abstract class AbstractActionController extends AbstractController
     /**
      * @return ResponseInterface
      */
-    public function dispatch()
+    public function dispatch() : ResponseInterface
     {
         $request = $this->request;
         $action = AbstractController::getMethodFromAction(
@@ -34,7 +36,6 @@ abstract class AbstractActionController extends AbstractController
             $event->setTarget($this);
             $event->setParam('method', $action);
             $event->setRequest($this->getRequest());
-            $event->setResponse($this->getResponse());
             $event->setNext($this->getNext());
 
             $result = $this->getEventManager()->triggerEventUntil(function ($r) {

@@ -7,6 +7,8 @@
  * Time: 8:24 PM
  */
 
+declare(strict_types=1);
+
 namespace Dot\Controller;
 
 use Dot\Controller\Event\ControllerEventListenerAwareInterface;
@@ -46,7 +48,7 @@ abstract class AbstractController implements
      * @param  string $action
      * @return string
      */
-    public static function getMethodFromAction($action)
+    public static function getMethodFromAction(string $action) : string
     {
         $method = str_replace(['.', '-', '_'], ' ', $action);
         $method = ucwords($method);
@@ -66,7 +68,7 @@ abstract class AbstractController implements
         ServerRequestInterface $request,
         ResponseInterface $response,
         callable $next = null
-    ) {
+    ) : ResponseInterface {
         $this->request = $request;
         $this->response = $response;
         $this->next = $next;
@@ -74,12 +76,12 @@ abstract class AbstractController implements
         return $this->dispatch();
     }
 
-    abstract public function dispatch();
+    abstract public function dispatch() : ResponseInterface;
 
     /**
      * @return ServerRequestInterface
      */
-    public function getRequest()
+    public function getRequest() : ServerRequestInterface
     {
         return $this->request;
     }
@@ -87,7 +89,7 @@ abstract class AbstractController implements
     /**
      * @return ResponseInterface
      */
-    public function getResponse()
+    public function getResponse() : ResponseInterface
     {
         return $this->response;
     }
@@ -95,7 +97,7 @@ abstract class AbstractController implements
     /**
      * @return callable
      */
-    public function getNext()
+    public function getNext() : callable
     {
         return $this->next;
     }
@@ -110,7 +112,7 @@ abstract class AbstractController implements
      * @param  array $params
      * @return mixed
      */
-    public function __call($method, $params)
+    public function __call(string $method, array $params) : mixed
     {
         $plugin = $this->plugin($method);
         if (is_callable($plugin)) {
@@ -123,10 +125,10 @@ abstract class AbstractController implements
      * Get plugin instance
      *
      * @param  string $name Name of plugin to return
-     * @param  null|array $options Options to pass to plugin constructor (if not already instantiated)
+     * @param  array $options Options to pass to plugin constructor (if not already instantiated)
      * @return mixed
      */
-    public function plugin($name, array $options = null)
+    public function plugin(string $name, array $options = [])
     {
         return $this->getPluginManager()->get($name, $options);
     }
@@ -134,18 +136,16 @@ abstract class AbstractController implements
     /**
      * @return PluginManager
      */
-    public function getPluginManager()
+    public function getPluginManager() : PluginManager
     {
         return $this->pluginManager;
     }
 
     /**
      * @param PluginManager $pluginManager
-     * @return $this
      */
     public function setPluginManager(PluginManager $pluginManager)
     {
         $this->pluginManager = $pluginManager;
-        return $this;
     }
 }

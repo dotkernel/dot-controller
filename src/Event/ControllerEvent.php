@@ -7,6 +7,8 @@
  * Time: 4:20 PM
  */
 
+declare(strict_types=1);
+
 namespace Dot\Controller\Event;
 
 use Dot\Event\Event;
@@ -25,18 +27,16 @@ class ControllerEvent extends Event
     /**
      * @return callable
      */
-    public function getNext()
+    public function getNext() : callable
     {
         return $this->next;
     }
 
     /**
      * @param callable $next
-     * @return ControllerEvent
      */
-    public function setNext($next)
+    public function setNext(callable $next)
     {
         $this->next = $next;
-        return $this;
     }
 }
