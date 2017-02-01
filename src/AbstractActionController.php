@@ -26,9 +26,13 @@ abstract class AbstractActionController extends AbstractController
     public function dispatch(): ResponseInterface
     {
         $request = $this->request;
-        $action = AbstractController::getMethodFromAction(
-            strtolower($request->getAttribute('action', 'index'))
-        );
+
+        $action = strtolower(trim($request->getAttribute('action', 'index')));
+        if (empty($action)) {
+            $action = 'index';
+        }
+
+        $action = AbstractController::getMethodFromAction($action);
 
         if (method_exists($this, $action)) {
             //trigger an event, and return if the result is a ResponseInterface
