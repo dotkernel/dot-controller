@@ -129,7 +129,7 @@ abstract class AbstractController implements
      * @param  array $options Options to pass to plugin constructor (if not already instantiated)
      * @return PluginInterface|callable
      */
-    public function plugin(string $name, array $options = []) : PluginInterface
+    public function plugin(string $name, array $options = []): PluginInterface
     {
         return $this->getPluginManager()->get($name, $options);
     }

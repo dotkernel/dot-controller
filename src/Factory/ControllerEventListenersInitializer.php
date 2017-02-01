@@ -53,6 +53,12 @@ class ControllerEventListenersInitializer implements InitializerInterface
 
                                 $listener = $this->getControllerListener($container, $listener);
                                 $controller->attachListener($listener, $priority);
+                            } elseif (is_string($listenerConfig)) {
+                                $listener = $listenerConfig;
+                                $priority = 1;
+
+                                $listener = $this->getControllerListener($container, $listener);
+                                $controller->attachListener($listener, $priority);
                             }
                         }
                     }
