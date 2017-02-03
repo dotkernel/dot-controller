@@ -36,7 +36,7 @@ class TemplatePlugin implements PluginInterface
      * @param array|null $params
      * @return mixed
      */
-    public function __invoke(string $templateName = null, array $params = null): mixed
+    public function __invoke(string $templateName = null, array $params = []): mixed
     {
         $args = func_get_args();
         if (empty($args)) {
