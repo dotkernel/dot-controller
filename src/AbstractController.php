@@ -43,6 +43,9 @@ abstract class AbstractController implements
     /** @var  callable */
     protected $next;
 
+    /** @var bool  */
+    protected $debug = false;
+
     /**
      * Transform an "action" token into a method name
      *
@@ -148,5 +151,21 @@ abstract class AbstractController implements
     public function setPluginManager(PluginManager $pluginManager)
     {
         $this->pluginManager = $pluginManager;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebug(): bool
+    {
+        return $this->debug;
+    }
+
+    /**
+     * @param bool $debug
+     */
+    public function setDebug(bool $debug)
+    {
+        $this->debug = $debug;
     }
 }
