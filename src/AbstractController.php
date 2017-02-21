@@ -11,8 +11,7 @@ declare(strict_types = 1);
 
 namespace Dot\Controller;
 
-use Dot\Controller\Event\ControllerEventListenerAwareInterface;
-use Dot\Controller\Event\ControllerEventListenerAwareTrait;
+use Dot\Controller\Event\DispatchControllerEventsTrait;
 use Dot\Controller\Plugin\PluginInterface;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
@@ -26,10 +25,9 @@ use Zend\EventManager\EventManagerAwareInterface;
  */
 abstract class AbstractController implements
     PluginManagerAwareInterface,
-    EventManagerAwareInterface,
-    ControllerEventListenerAwareInterface
+    EventManagerAwareInterface
 {
-    use ControllerEventListenerAwareTrait;
+    use DispatchControllerEventsTrait;
 
     /** @var  PluginManager */
     protected $pluginManager;
@@ -43,7 +41,7 @@ abstract class AbstractController implements
     /** @var  callable */
     protected $next;
 
-    /** @var bool  */
+    /** @var bool */
     protected $debug = false;
 
     /**

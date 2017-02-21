@@ -11,7 +11,7 @@ declare(strict_types = 1);
 
 namespace Dot\Controller\Factory;
 
-use Dot\Controller\Event\ControllerEventListenerAwareInterface;
+use Dot\Controller\AbstractController;
 use Dot\Controller\Event\ControllerEventListenerInterface;
 use Dot\Controller\Exception\RuntimeException;
 use Interop\Container\ContainerInterface;
@@ -29,14 +29,14 @@ class ControllerEventListenersInitializer implements InitializerInterface
      */
     public function __invoke(ContainerInterface $container, $instance)
     {
-        if ($instance instanceof ControllerEventListenerAwareInterface) {
+        if ($instance instanceof AbstractController) {
             $this->attachControllerListeners($container, $instance);
         }
     }
 
     public function attachControllerListeners(
         ContainerInterface $container,
-        ControllerEventListenerAwareInterface $controller
+        AbstractController $controller
     ) {
         $config = $container->get('config')['dot_controller'];
 
@@ -52,13 +52,13 @@ class ControllerEventListenersInitializer implements InitializerInterface
                                 $priority = (int)($listenerConfig['priority'] ?? 1);
 
                                 $listener = $this->getControllerListener($container, $listener);
-                                $controller->attachListener($listener, $priority);
+                                $listener->attach($controller->getEventManager(), $priority);
                             } elseif (is_string($listenerConfig)) {
                                 $listener = $listenerConfig;
                                 $priority = 1;
 
                                 $listener = $this->getControllerListener($container, $listener);
-                                $controller->attachListener($listener, $priority);
+                                $listener->attach($controller->getEventManager(), $priority);
                             }
                         }
                     }
@@ -70,10 +70,12 @@ class ControllerEventListenersInitializer implements InitializerInterface
     /**
      * @param ContainerInterface $container
      * @param string $listenerName
-     * @return mixed
+     * @return ControllerEventListenerInterface
      */
-    protected function getControllerListener(ContainerInterface $container, string $listenerName)
-    {
+    protected function getControllerListener(
+        ContainerInterface $container,
+        string $listenerName
+    ): ControllerEventListenerInterface {
         $listener = $listenerName;
         if ($container->has($listener)) {
             $listener = $container->get($listener);

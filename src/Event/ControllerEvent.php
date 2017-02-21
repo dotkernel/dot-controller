@@ -20,23 +20,4 @@ use Dot\Event\Event;
 class ControllerEvent extends Event
 {
     const EVENT_CONTROLLER_DISPATCH = 'event.controller.dispatch';
-
-    /** @var  callable */
-    protected $next;
-
-    /**
-     * @return callable
-     */
-    public function getNext(): callable
-    {
-        return $this->next;
-    }
-
-    /**
-     * @param callable $next
-     */
-    public function setNext(callable $next)
-    {
-        $this->next = $next;
-    }
 }

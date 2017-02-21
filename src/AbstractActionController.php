@@ -35,19 +35,13 @@ abstract class AbstractActionController extends AbstractController
         $action = AbstractController::getMethodFromAction($action);
 
         if (method_exists($this, $action)) {
-            //trigger an event, and return if the result is a ResponseInterface
-            $event = new ControllerEvent(ControllerEvent::EVENT_CONTROLLER_DISPATCH);
-            $event->setTarget($this);
-            $event->setParam('method', $action);
-            $event->setRequest($this->getRequest());
-            $event->setNext($this->getNext());
-
-            $result = $this->getEventManager()->triggerEventUntil(function ($r) {
-                return ($r instanceof ResponseInterface);
-            }, $event)->last();
-
-            if ($result instanceof ResponseInterface) {
-                return $result;
+            $r = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_DISPATCH, [
+                'request' => $request,
+                'next' => $this->getNext(),
+                'method' => $action
+            ]);
+            if ($r instanceof ResponseInterface) {
+                return $r;
             }
 
             return $this->$action();
