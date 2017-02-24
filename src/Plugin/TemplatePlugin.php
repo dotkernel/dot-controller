@@ -36,7 +36,7 @@ class TemplatePlugin implements PluginInterface
      * @param array|null $params
      * @return mixed
      */
-    public function __invoke(string $templateName = null, array $params = []): mixed
+    public function __invoke(string $templateName = null, array $params = [])
     {
         $args = func_get_args();
         if (empty($args)) {
@@ -61,7 +61,7 @@ class TemplatePlugin implements PluginInterface
      * @param string $param
      * @param mixed $value
      */
-    public function addDefaultParam(string $templateName, string $param, mixed $value)
+    public function addDefaultParam(string $templateName, string $param, $value)
     {
         $this->template->addDefaultParam($templateName, $param, $value);
     }

@@ -114,7 +114,7 @@ abstract class AbstractController implements
      * @param  array $params
      * @return mixed
      */
-    public function __call(string $method, array $params): mixed
+    public function __call(string $method, array $params)
     {
         $plugin = $this->plugin($method);
         if (is_callable($plugin)) {

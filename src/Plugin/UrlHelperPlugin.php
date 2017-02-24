@@ -36,7 +36,7 @@ class UrlHelperPlugin implements PluginInterface
      * @param array|null $routeParams
      * @return mixed
      */
-    public function __invoke(string $routeName = null, array $routeParams = []): mixed
+    public function __invoke(string $routeName = null, array $routeParams = [])
     {
         $args = func_get_args();
         if (empty($args)) {
