@@ -42,10 +42,11 @@ class ConfigProvider
         return [
             'factories' => [
                 PluginManager::class => PluginManagerFactory::class,
-
-                PluginManagerAwareInitializer::class => InvokableFactory::class,
-                ControllerEventListenersInitializer::class => InvokableFactory::class,
             ],
+            'initializers' => [
+                PluginManagerAwareInitializer::class,
+                ControllerEventListenersInitializer::class,
+            ]
         ];
     }
 }
