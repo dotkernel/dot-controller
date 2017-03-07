@@ -34,10 +34,8 @@ class ControllerEventListenersInitializer implements InitializerInterface
         }
     }
 
-    public function attachControllerListeners(
-        ContainerInterface $container,
-        AbstractController $controller
-    ) {
+    public function attachControllerListeners(ContainerInterface $container, AbstractController $controller)
+    {
         $config = $container->get('config')['dot_controller'];
 
         if (isset($config['event_listeners']) && is_array($config['event_listeners'])) {

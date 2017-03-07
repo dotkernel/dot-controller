@@ -15,7 +15,6 @@ use Dot\Controller\Factory\ControllerEventListenersInitializer;
 use Dot\Controller\Factory\PluginManagerAwareInitializer;
 use Dot\Controller\Factory\PluginManagerFactory;
 use Dot\Controller\Plugin\PluginManager;
-use Zend\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Class ConfigProvider
