@@ -15,7 +15,7 @@
     "container-interop/container-interop": "^1.1",
     "zendframework/zend-servicemanager": "^3.0",
 
-    "dotkernel/dot-event": "dev-develop as 0.6.x-dev"
+    "dotkernel/dot-event": "~0.1"
   },
   "require-dev": {
     "zendframework/zend-expressive-template": "^1.0",
@@ -36,7 +36,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "0.6-dev"
+      "dev-master": "0.2-dev"
     }
   }
 }
