@@ -7,6 +7,8 @@
  * Time: 8:24 PM
  */
 
+declare(strict_types = 1);
+
 namespace Dot\Controller\Plugin;
 
 use Zend\Expressive\Template\TemplateRendererInterface;
@@ -30,13 +32,28 @@ class TemplatePlugin implements PluginInterface
     }
 
     /**
-     * @param string $name
+     * @param string|null $templateName
+     * @param array|null $params
+     * @return mixed
+     */
+    public function __invoke(string $templateName = null, array $params = [])
+    {
+        $args = func_get_args();
+        if (empty($args)) {
+            return $this;
+        }
+
+        return $this->render($templateName, $params);
+    }
+
+    /**
+     * @param string $templateName
      * @param array $params
      * @return string
      */
-    public function render($name, array $params = [])
+    public function render(string $templateName, array $params = []): string
     {
-        return $this->template->render($name, $params);
+        return $this->template->render($templateName, $params);
     }
 
     /**
@@ -44,7 +61,7 @@ class TemplatePlugin implements PluginInterface
      * @param string $param
      * @param mixed $value
      */
-    public function addDefaultParam($templateName, $param, $value)
+    public function addDefaultParam(string $templateName, string $param, $value)
     {
         $this->template->addDefaultParam($templateName, $param, $value);
     }

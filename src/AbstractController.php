@@ -7,19 +7,28 @@
  * Time: 8:24 PM
  */
 
+declare(strict_types = 1);
+
 namespace Dot\Controller;
 
+use Dot\Controller\Event\DispatchControllerEventsTrait;
+use Dot\Controller\Plugin\PluginInterface;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\EventManager\EventManagerAwareInterface;
 
 /**
  * Class AbstractController
  * @package Dot\Controller
  */
-abstract class AbstractController implements PluginManagerAwareInterface
+abstract class AbstractController implements
+    PluginManagerAwareInterface,
+    EventManagerAwareInterface
 {
+    use DispatchControllerEventsTrait;
+
     /** @var  PluginManager */
     protected $pluginManager;
 
@@ -32,13 +41,16 @@ abstract class AbstractController implements PluginManagerAwareInterface
     /** @var  callable */
     protected $next;
 
+    /** @var bool */
+    protected $debug = false;
+
     /**
      * Transform an "action" token into a method name
      *
      * @param  string $action
      * @return string
      */
-    public static function getMethodFromAction($action)
+    public static function getMethodFromAction(string $action): string
     {
         $method = str_replace(['.', '-', '_'], ' ', $action);
         $method = ucwords($method);
@@ -58,7 +70,7 @@ abstract class AbstractController implements PluginManagerAwareInterface
         ServerRequestInterface $request,
         ResponseInterface $response,
         callable $next = null
-    ) {
+    ): ResponseInterface {
         $this->request = $request;
         $this->response = $response;
         $this->next = $next;
@@ -66,12 +78,12 @@ abstract class AbstractController implements PluginManagerAwareInterface
         return $this->dispatch();
     }
 
-    abstract public function dispatch();
+    abstract public function dispatch(): ResponseInterface;
 
     /**
      * @return ServerRequestInterface
      */
-    public function getRequest()
+    public function getRequest(): ServerRequestInterface
     {
         return $this->request;
     }
@@ -79,7 +91,7 @@ abstract class AbstractController implements PluginManagerAwareInterface
     /**
      * @return ResponseInterface
      */
-    public function getResponse()
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }
@@ -87,7 +99,7 @@ abstract class AbstractController implements PluginManagerAwareInterface
     /**
      * @return callable
      */
-    public function getNext()
+    public function getNext(): callable
     {
         return $this->next;
     }
@@ -102,7 +114,7 @@ abstract class AbstractController implements PluginManagerAwareInterface
      * @param  array $params
      * @return mixed
      */
-    public function __call($method, $params)
+    public function __call(string $method, array $params)
     {
         $plugin = $this->plugin($method);
         if (is_callable($plugin)) {
@@ -115,10 +127,10 @@ abstract class AbstractController implements PluginManagerAwareInterface
      * Get plugin instance
      *
      * @param  string $name Name of plugin to return
-     * @param  null|array $options Options to pass to plugin constructor (if not already instantiated)
-     * @return mixed
+     * @param  array $options Options to pass to plugin constructor (if not already instantiated)
+     * @return PluginInterface|callable
      */
-    public function plugin($name, array $options = null)
+    public function plugin(string $name, array $options = []): PluginInterface
     {
         return $this->getPluginManager()->get($name, $options);
     }
@@ -126,18 +138,32 @@ abstract class AbstractController implements PluginManagerAwareInterface
     /**
      * @return PluginManager
      */
-    public function getPluginManager()
+    public function getPluginManager(): PluginManager
     {
         return $this->pluginManager;
     }
 
     /**
      * @param PluginManager $pluginManager
-     * @return $this
      */
     public function setPluginManager(PluginManager $pluginManager)
     {
         $this->pluginManager = $pluginManager;
-        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebug(): bool
+    {
+        return $this->debug;
+    }
+
+    /**
+     * @param bool $debug
+     */
+    public function setDebug(bool $debug)
+    {
+        $this->debug = $debug;
     }
 }

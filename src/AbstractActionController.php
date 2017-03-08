@@ -7,27 +7,43 @@
  * Time: 8:24 PM
  */
 
+declare(strict_types = 1);
+
 namespace Dot\Controller;
 
+use Dot\Controller\Event\ControllerEvent;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class AbstractActionController
  * @package Dot\Controller
  */
-class AbstractActionController extends AbstractController
+abstract class AbstractActionController extends AbstractController
 {
     /**
      * @return ResponseInterface
      */
-    public function dispatch()
+    public function dispatch(): ResponseInterface
     {
         $request = $this->request;
-        $action = AbstractController::getMethodFromAction(
-            strtolower($request->getAttribute('action', 'index'))
-        );
+
+        $action = strtolower(trim($request->getAttribute('action', 'index')));
+        if (empty($action)) {
+            $action = 'index';
+        }
+
+        $action = AbstractController::getMethodFromAction($action);
 
         if (method_exists($this, $action)) {
+            $r = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_DISPATCH, [
+                'request' => $request,
+                'next' => $this->getNext(),
+                'method' => $action
+            ]);
+            if ($r instanceof ResponseInterface) {
+                return $r;
+            }
+
             return $this->$action();
         }
 
