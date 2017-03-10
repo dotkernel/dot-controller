@@ -1,7 +1,7 @@
 {
   "name": "dotkernel/dot-controller",
   "type": "library",
-  "description": "Controller like middleware with plugin support",
+  "description": "DotKernel controller like middleware component with plugin support",
   "license": "MIT",
   "authors": [
     {
@@ -15,7 +15,7 @@
     "container-interop/container-interop": "^1.1",
     "zendframework/zend-servicemanager": "^3.0",
 
-    "dotkernel/dot-event": "~0.1"
+    "dotkernel/dot-event": "^0.1"
   },
   "require-dev": {
     "zendframework/zend-expressive-template": "^1.0",
