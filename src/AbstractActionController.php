@@ -23,9 +23,7 @@ abstract class AbstractActionController extends AbstractController
      */
     public function dispatch(): ResponseInterface
     {
-        $request = $this->request;
-
-        $action = strtolower(trim($request->getAttribute('action', 'index')));
+        $action = strtolower(trim($this->request->getAttribute('action', 'index')));
         if (empty($action)) {
             $action = 'index';
         }
@@ -34,19 +32,20 @@ abstract class AbstractActionController extends AbstractController
 
         if (method_exists($this, $action)) {
             $r = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_DISPATCH, [
-                'request' => $request,
-                'next' => $this->getNext(),
+                'request' => $this->request,
+                'delegate' => $this->getDelegate(),
                 'method' => $action
             ]);
             if ($r instanceof ResponseInterface) {
                 return $r;
             }
 
+            $this->request = $r->getParam('request');
             return $this->$action();
         }
 
         //just go the the next middleware, it will eventually hit a 404 if no one handles the request
-        $next = $this->getNext();
-        return $next($this->getRequest(), $this->getResponse());
+        $delegate = $this->getDelegate();
+        return $delegate->process($this->request);
     }
 }

@@ -13,6 +13,8 @@ use Dot\Controller\Event\DispatchControllerEventsTrait;
 use Dot\Controller\Plugin\PluginInterface;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\EventManager\EventManagerAwareInterface;
@@ -22,6 +24,7 @@ use Zend\EventManager\EventManagerAwareInterface;
  * @package Dot\Controller
  */
 abstract class AbstractController implements
+    MiddlewareInterface,
     PluginManagerAwareInterface,
     EventManagerAwareInterface
 {
@@ -33,11 +36,8 @@ abstract class AbstractController implements
     /** @var  ServerRequestInterface */
     protected $request;
 
-    /** @var  ResponseInterface */
-    protected $response;
-
-    /** @var  callable */
-    protected $next;
+    /** @var  DelegateInterface */
+    protected $delegate;
 
     /** @var bool */
     protected $debug = false;
@@ -58,20 +58,10 @@ abstract class AbstractController implements
         return $method;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param callable|null $next
-     * @return ResponseInterface
-     */
-    public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        callable $next = null
-    ): ResponseInterface {
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
+    {
         $this->request = $request;
-        $this->response = $response;
-        $this->next = $next;
+        $this->delegate = $delegate;
 
         return $this->dispatch();
     }
@@ -87,19 +77,11 @@ abstract class AbstractController implements
     }
 
     /**
-     * @return ResponseInterface
+     * @return DelegateInterface
      */
-    public function getResponse(): ResponseInterface
+    public function getDelegate(): DelegateInterface
     {
-        return $this->response;
-    }
-
-    /**
-     * @return callable
-     */
-    public function getNext(): callable
-    {
-        return $this->next;
+        return $this->delegate;
     }
 
     /**
