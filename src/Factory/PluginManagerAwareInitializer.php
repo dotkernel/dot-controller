@@ -12,14 +12,13 @@ namespace Dot\Controller\Factory;
 use Dot\Controller\AbstractController;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
-use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Initializer\InitializerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class PluginManagerAwareInitializer
  * @package Dot\Controller\Factory
  */
-class PluginManagerAwareInitializer implements InitializerInterface
+class PluginManagerAwareInitializer
 {
     /**
      * @param ContainerInterface $container

@@ -12,18 +12,17 @@ namespace Dot\Controller\Factory;
 use Dot\Controller\AbstractController;
 use Dot\Controller\Event\ControllerEventListenerInterface;
 use Dot\Controller\Exception\RuntimeException;
-use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Initializer\InitializerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class ControllerEventListenersInitializer
  * @package Dot\Controller\Factory
  */
-class ControllerEventListenersInitializer implements InitializerInterface
+class ControllerEventListenersInitializer
 {
     /**
      * @param ContainerInterface $container
-     * @param object $instance
+     * @param $instance
      */
     public function __invoke(ContainerInterface $container, $instance)
     {
@@ -32,6 +31,10 @@ class ControllerEventListenersInitializer implements InitializerInterface
         }
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @param AbstractController $controller
+     */
     public function attachControllerListeners(ContainerInterface $container, AbstractController $controller)
     {
         $config = $container->get('config')['dot_controller'];
