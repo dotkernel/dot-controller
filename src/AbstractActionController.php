@@ -34,6 +34,7 @@ abstract class AbstractActionController extends AbstractController
             $r = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_DISPATCH, [
                 'request' => $this->request,
                 'delegate' => $this->getDelegate(),
+                'controller' => $this,
                 'method' => $action
             ]);
             if ($r instanceof ResponseInterface) {

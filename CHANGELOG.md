@@ -1,3 +1,21 @@
+## 0.2.2 - unreleased
+
+### Changed
+* added the controller as dispatch event parameter
+
+### Added
+* Nothing
+
+### Deprecated
+* Nothing
+
+### Removed
+* Nothing
+
+### Fixed
+* Nothing
+
+
 ## 0.2.1 - 2017-03-18
 
 ### Changed
