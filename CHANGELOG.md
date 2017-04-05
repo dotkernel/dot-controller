@@ -1,16 +1,17 @@
-## 0.2.2 - unreleased
+## 0.3.0 - unreleased
 
 ### Changed
 * added the controller as dispatch event parameter
+* controller event names
 
 ### Added
-* Nothing
+* new controller event `ControllerEvent::EVENT_CONTROLLER_AFTER_DISPATCH` after dispatching, which allows you to capture the returned response, and possible override the response generation
 
 ### Deprecated
 * Nothing
 
 ### Removed
-* Nothing
+* `ControllerEvent::EVENT_CONTROLLER_DISPATCH` renamed to `ControllerEvent::EVENT_CONTROLLER_BEFORE_DISPATCH`
 
 ### Fixed
 * Nothing
