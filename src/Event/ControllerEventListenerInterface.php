@@ -22,5 +22,10 @@ interface ControllerEventListenerInterface extends ListenerAggregateInterface
     /**
      * @param ControllerEvent $e
      */
-    public function onDispatch(ControllerEvent $e);
+    public function onBeforeDispatch(ControllerEvent $e);
+
+    /**
+     * @param ControllerEvent $e
+     */
+    public function onAfterDispatch(ControllerEvent $e);
 }
