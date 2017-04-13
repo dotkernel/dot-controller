@@ -17,5 +17,6 @@ use Dot\Event\Event;
  */
 class ControllerEvent extends Event
 {
-    const EVENT_CONTROLLER_DISPATCH = 'event.controller.dispatch';
+    const EVENT_CONTROLLER_BEFORE_DISPATCH = 'event.controller.beforeDispatch';
+    const EVENT_CONTROLLER_AFTER_DISPATCH = 'event.controller.afterDispatch';
 }

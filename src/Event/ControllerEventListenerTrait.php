@@ -27,13 +27,23 @@ trait ControllerEventListenerTrait
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
-            ControllerEvent::EVENT_CONTROLLER_DISPATCH,
-            [$this, 'onDispatch'],
+            ControllerEvent::EVENT_CONTROLLER_BEFORE_DISPATCH,
+            [$this, 'onBeforeDispatch'],
+            $priority
+        );
+        $this->listeners[] = $events->attach(
+            ControllerEvent::EVENT_CONTROLLER_AFTER_DISPATCH,
+            [$this, 'onAfterDispatch'],
             $priority
         );
     }
 
-    public function onDispatch(ControllerEvent $e)
+    public function onBeforeDispatch(ControllerEvent $e)
+    {
+        //no-op
+    }
+
+    public function onAfterDispatch(ControllerEvent $e)
     {
         //no-op
     }

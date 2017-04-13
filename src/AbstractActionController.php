@@ -31,9 +31,10 @@ abstract class AbstractActionController extends AbstractController
         $action = AbstractController::getMethodFromAction($action);
 
         if (method_exists($this, $action)) {
-            $r = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_DISPATCH, [
+            $r = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_BEFORE_DISPATCH, [
                 'request' => $this->request,
                 'delegate' => $this->getDelegate(),
+                'controller' => $this,
                 'method' => $action
             ]);
             if ($r instanceof ResponseInterface) {
@@ -41,7 +42,15 @@ abstract class AbstractActionController extends AbstractController
             }
 
             $this->request = $r->getParam('request');
-            return $this->$action();
+            $response = $this->$action();
+            $params = array_merge($r->getParams(), ['response' => $response]);
+
+            $r = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_AFTER_DISPATCH, $params);
+            if ($r instanceof ResponseInterface) {
+                return $r;
+            }
+
+            return $response;
         }
 
         //just go the the next middleware, it will eventually hit a 404 if no one handles the request
