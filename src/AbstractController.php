@@ -18,6 +18,7 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\EventManager\EventManagerAwareInterface;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class AbstractController
@@ -120,6 +121,9 @@ abstract class AbstractController implements
      */
     public function getPluginManager(): PluginManager
     {
+        if (!$this->pluginManager) {
+            $this->pluginManager = new PluginManager(new ServiceManager(), []);
+        }
         return $this->pluginManager;
     }
 
