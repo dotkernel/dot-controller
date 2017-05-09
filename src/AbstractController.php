@@ -10,6 +10,7 @@ declare(strict_types = 1);
 namespace Dot\Controller;
 
 use Dot\Controller\Event\DispatchControllerEventsTrait;
+use Dot\Controller\Exception\RuntimeException;
 use Dot\Controller\Plugin\PluginInterface;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
@@ -18,6 +19,7 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\EventManager\EventManagerAwareInterface;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class AbstractController
@@ -120,6 +122,10 @@ abstract class AbstractController implements
      */
     public function getPluginManager(): PluginManager
     {
+        if (!$this->pluginManager) {
+            throw new RuntimeException('Controller plugin manager not set. Enable the controller module by merging ' .
+                'its ConfigProvider and make sure the controller is registered in the service manager');
+        }
         return $this->pluginManager;
     }
 
