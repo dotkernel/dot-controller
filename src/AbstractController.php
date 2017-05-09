@@ -123,8 +123,14 @@ abstract class AbstractController implements
     public function getPluginManager(): PluginManager
     {
         if (!$this->pluginManager) {
-            throw new RuntimeException('Controller plugin manager not set. Enable the controller module by merging ' .
-                'its ConfigProvider and make sure the controller is registered in the service manager');
+            throw new RuntimeException(
+                sprintf(
+                    'Controller plugin manager not set for controller `%s`.' .
+                    ' Enable the controller module by merging' .
+                    ' its ConfigProvider and make sure the controller is registered in the service manager',
+                    get_class($this)
+                )
+            );
         }
         return $this->pluginManager;
     }
