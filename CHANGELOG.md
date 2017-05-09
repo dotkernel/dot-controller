@@ -1,3 +1,21 @@
+## 0.3.1 - 2017-05-09
+
+### Changed
+* throw a more appropriate error message in case controller was not initialized properly
+
+### Added
+* Nothing
+
+### Deprecated
+* Nothing
+
+### Removed
+* Nothing
+
+### Fixed
+* Nothing
+
+
 ## 0.3.0 - 2017-04-21
 
 ### Changed
