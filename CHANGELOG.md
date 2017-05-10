@@ -1,3 +1,21 @@
+## 0.3.2 - unreleased
+
+### Changed
+* after dispatch event now considers the event parameter `response` to return if the event listeners did not return a ResponseInterface directly
+
+### Added
+* Nothing
+
+### Deprecated
+* Nothing
+
+### Removed
+* Nothing
+
+### Fixed
+* Nothing
+
+
 ## 0.3.1 - 2017-05-09
 
 ### Changed

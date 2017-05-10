@@ -50,6 +50,11 @@ abstract class AbstractActionController extends AbstractController
                 return $r;
             }
 
+            $eventResponse = $r->getParam('response');
+            if ($eventResponse instanceof ResponseInterface) {
+                $response = $eventResponse;
+            }
+
             return $response;
         }
 
