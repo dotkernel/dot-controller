@@ -1,5 +1,5 @@
 {
-  "name": "dotkernel/dot-controller",
+  "name": "gabidj/dot-controller",
   "type": "library",
   "description": "DotKernel controller like middleware component with plugin support",
   "license": "MIT",
