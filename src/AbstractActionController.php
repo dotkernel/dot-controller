@@ -55,6 +55,6 @@ abstract class AbstractActionController extends AbstractController
 
         //just go the the next middleware, it will eventually hit a 404 if no one handles the request
         $handler = $this->getHandler();
-        return $handler->process($this->request);
+        return $handler->handle($this->request);
     }
 }
