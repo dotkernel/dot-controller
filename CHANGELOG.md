@@ -33,6 +33,8 @@
 ### Fixed
 * Nothing
 
+## 1.0.0 - 2018-04-11
+* [BC break] replaced delegate with handler
 
 ## 0.3.0 - 2017-04-21
 
