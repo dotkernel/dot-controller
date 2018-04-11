@@ -1,11 +1,6 @@
 <?php
-/**
- * @see https://github.com/dotkernel/dot-controller/ for the canonical source repository
- * @copyright Copyright (c) 2017 Apidemia (https://www.apidemia.com)
- * @license https://github.com/dotkernel/dot-controller/blob/master/LICENSE.md MIT License
- */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Dot\Controller;
 
@@ -14,12 +9,15 @@ use Dot\Controller\Factory\PluginManagerAwareInitializer;
 use Dot\Controller\Factory\PluginManagerFactory;
 use Dot\Controller\Plugin\PluginManager;
 
-/**
- * Class ConfigProvider
- * @package Dot\Controller
- */
 class ConfigProvider
 {
+    /**
+     * Returns the configuration array
+     *
+     * To add a bit of a structure, each section is defined in a separate
+     * method which returns an array with its configuration.
+     *
+     */
     public function __invoke(): array
     {
         return [

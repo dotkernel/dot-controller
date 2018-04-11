@@ -1,3 +1,21 @@
+## 0.3.2 - unreleased
+
+### Changed
+* after dispatch event now considers the event parameter `response` to return if the event listeners did not return a ResponseInterface directly
+
+### Added
+* Nothing
+
+### Deprecated
+* Nothing
+
+### Removed
+* Nothing
+
+### Fixed
+* Nothing
+
+
 ## 0.3.1 - 2017-05-09
 
 ### Changed
@@ -15,6 +33,8 @@
 ### Fixed
 * Nothing
 
+## 1.0.0 - 2018-04-11
+* [BC break] replaced delegate with handler
 
 ## 0.3.0 - 2017-04-21
 

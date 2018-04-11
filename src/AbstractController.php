@@ -8,18 +8,17 @@
 declare(strict_types = 1);
 
 namespace Dot\Controller;
-
 use Dot\Controller\Event\DispatchControllerEventsTrait;
 use Dot\Controller\Exception\RuntimeException;
 use Dot\Controller\Plugin\PluginInterface;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Zend\EventManager\EventManagerAwareInterface;
-use Zend\ServiceManager\ServiceManager;
+
 
 /**
  * Class AbstractController
@@ -38,8 +37,9 @@ abstract class AbstractController implements
     /** @var  ServerRequestInterface */
     protected $request;
 
-    /** @var  DelegateInterface */
-    protected $delegate;
+    /** @var RequestHandlerInterface */
+    protected $handler;
+
 
     /** @var bool */
     protected $debug = false;
@@ -60,10 +60,10 @@ abstract class AbstractController implements
         return $method;
     }
 
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $this->request = $request;
-        $this->delegate = $delegate;
+        $this->handler = $handler;
 
         return $this->dispatch();
     }
@@ -79,11 +79,11 @@ abstract class AbstractController implements
     }
 
     /**
-     * @return DelegateInterface
+     * @return RequestHandlerInterface
      */
-    public function getDelegate(): DelegateInterface
+    public function getHandler(): RequestHandlerInterface
     {
-        return $this->delegate;
+        return $this->handler;
     }
 
     /**
@@ -132,6 +132,7 @@ abstract class AbstractController implements
                 )
             );
         }
+        
         return $this->pluginManager;
     }
 
