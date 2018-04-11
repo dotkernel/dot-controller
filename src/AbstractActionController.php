@@ -33,7 +33,7 @@ abstract class AbstractActionController extends AbstractController
         if (method_exists($this, $action)) {
             $r = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_BEFORE_DISPATCH, [
                 'request' => $this->request,
-                'delegate' => $this->getDelegate(),
+                'handler' => $this->getHandler(),
                 'controller' => $this,
                 'method' => $action
             ]);
@@ -50,16 +50,11 @@ abstract class AbstractActionController extends AbstractController
                 return $r;
             }
 
-            $eventResponse = $r->getParam('response');
-            if ($eventResponse instanceof ResponseInterface) {
-                $response = $eventResponse;
-            }
-
             return $response;
         }
 
         //just go the the next middleware, it will eventually hit a 404 if no one handles the request
-        $delegate = $this->getDelegate();
-        return $delegate->process($this->request);
+        $handler = $this->getHandler();
+        return $handler->handle($this->request);
     }
 }
