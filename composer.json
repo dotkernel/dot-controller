@@ -12,7 +12,6 @@
   "require": {
     "php": "^7.1",
     "psr/http-message": "^1.0",
-    "http-interop/http-middleware": "^0.4.1",
     "zendframework/zend-servicemanager": "^3.3.0",
 
     "dotkernel/dot-event": "^0.2"
