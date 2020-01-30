@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace Dot\Controller\Plugin;
 
-use Zend\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\AbstractPluginManager;
 
 /**
  * Class PluginManager

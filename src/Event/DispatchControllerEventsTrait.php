@@ -12,8 +12,8 @@ namespace Dot\Controller\Event;
 use Dot\Controller\AbstractController;
 use Dot\Controller\Exception\RuntimeException;
 use Psr\Http\Message\ResponseInterface;
-use Zend\EventManager\EventManagerAwareTrait;
-use Zend\EventManager\ResponseCollection;
+use Laminas\EventManager\EventManagerAwareTrait;
+use Laminas\EventManager\ResponseCollection;
 
 /**
  * Class DispatchControllerEventsTrait

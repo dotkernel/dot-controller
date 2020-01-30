@@ -47,7 +47,7 @@ Then register this controller as a routed middleware in file `routes.php` just l
 
 Use case: You have defined a controller inside some package, with default actions. You want to add actions that fall into the same controller name(or route name more exactly). You want to do this without extending the controller provided by the package. In this case you can do the following
 - create your own controller, independent of the package's controller which adds more actions
-- Zend Expressive lets you define an array of middleware for a route, so you can register this controller before the package's controller
+- Mezzio lets you define an array of middleware for a route, so you can register this controller before the package's controller
 
 Now when a request for this route comes in, your controller will run first. DotKernel controllers are designed to ignore requests that cannot be matched to one of its methods, so if no action matches, it will call the next middleware, in our case, the second controller. 
 If this is the last controller, and action does not match here, it will go to the default 404 Not found page(handled by NotFoundDelegate)

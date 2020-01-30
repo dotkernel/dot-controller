@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace Dot\Controller\Plugin;
 
-use Zend\Expressive\Template\TemplateRendererInterface;
+use Mezzio\Template\TemplateRendererInterface;
 
 /**
  * Class TemplatePlugin

@@ -13,8 +13,8 @@ use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\TemplatePlugin;
 use Dot\Controller\Plugin\UrlHelperPlugin;
 use Psr\Container\ContainerInterface;
-use Zend\Expressive\Helper\UrlHelper;
-use Zend\Expressive\Template\TemplateRendererInterface;
+use Mezzio\Helper\UrlHelper;
+use Mezzio\Template\TemplateRendererInterface;
 
 /**
  * Class PluginManagerFactory

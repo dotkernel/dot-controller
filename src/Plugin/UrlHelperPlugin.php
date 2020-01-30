@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace Dot\Controller\Plugin;
 
-use Zend\Expressive\Helper\UrlHelper;
+use Mezzio\Helper\UrlHelper;
 
 /**
  * Class UrlHelperPlugin
