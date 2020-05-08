@@ -1,6 +1,6 @@
 # dot-controller
 
-This package contains controller like middleware to be used inside a DotKernel or Expressive application. It provides base classes for action based controllers similar to ZF3 controller component. It is more lightweight though, but supports controller plugins.
+This package contains controller like middleware to be used inside a DotKernel or Mezzio application. It provides base classes for action based controllers similar to Laminas controller component. It is more lightweight though, but supports controller plugins.
 
 ## Installation
 
@@ -13,7 +13,7 @@ Merge the `ConfigProvider` to your configuration aggregate.
 ## Usage
 
 Middleware controllers act as a handler for multiple routes. Some conventions were made:
-- register controllers in the routes array just like any expressive middleware. The requirement is that you should define an `action` route parameter(possibly optional) anywhere inside the route(e.g `/user[/{action}]`)
+- register controllers in the routes array just like any mezzio middleware. The requirement is that you should define an `action` route parameter(possibly optional) anywhere inside the route(e.g `/user[/{action}]`)
 - action parameter value is converted to a method name inside the controller. Underscore, dot and line characters are removed and the action name is converted to camel-case suffixed by the string `Action`. For example a route and action pair like `/user/forgot-password` will be converted to method `forgotPasswordAction`.
 - the default action value, if not present in the URI is `index`, so you should always define an `indexAction` within your controllers for displaying a default page or redirecting.
 
@@ -41,7 +41,7 @@ class UserController extends AbstractActionController
 }
 ```
 
-Then register this controller as a routed middleware in file `routes.php` just like a regular middleware.
+Then register this controller as a routed middleware in file `RoutesDelegator.php` just like a regular middleware.
 
 ### Multiple controllers for the same route
 
@@ -54,7 +54,7 @@ If this is the last controller, and action does not match here, it will go to th
 
 ## Controller plugins
 
-Controllers support controller plugins, much like controllers in a ZF3 application. The module comes packed with a few common plugins, but you can extend controller functionality with your own plugins too.
+Controllers support controller plugins, much like controllers in a Laminas application. The module comes packed with a few common plugins, but you can extend controller functionality with your own plugins too.
 
 ### Usage
 
@@ -73,11 +73,11 @@ $this->testPlugin()->someMethod();
 ```
 
 ### Built-in plugins
-Note: Each of these plugins requires the associated ZE packages to be installed and available in your project.
+Note: Each of these plugins requires the associated Mezzio packages to be installed and available in your project.
 Although these are optional, if a package is missing, the controller will not have the associated functionality available
 
-- `template` wraps TemplateInterface provided by ZE, to make template engine accessible to any controller
-- `url` wraps the UrlHelper class provided by ZE helpers package. Used to generate URIs from routes
+- `template` wraps TemplateInterface provided by Mezzio, to make template engine accessible to any controller
+- `url` wraps the UrlHelper class provided by Laminas helpers package. Used to generate URIs from routes
 
 
 ## Controller Events

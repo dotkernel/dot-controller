@@ -1,3 +1,21 @@
+## 3.0.0 - 2020-05-08
+
+### Changed
+* Updated package dependencies and php version.
+
+### Added
+* Nothing
+
+### Deprecated
+* Nothing
+
+### Removed
+* Nothing
+
+### Fixed
+* Nothing
+
+
 ## 2.0.0 - 2020-01-30
 
 ### Changed
