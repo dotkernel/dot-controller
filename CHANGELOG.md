@@ -1,4 +1,4 @@
-## 3..0 - 2020-11-02
+## 3.1.0 - 2020-11-02
 
 ### Changed
 * Composer 2 compatibility.
