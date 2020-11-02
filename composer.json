@@ -3,6 +3,7 @@
     "type": "library",
     "description": "DotKernel controller like middleware component with plugin support",
     "license": "MIT",
+    "homepage": "https://github.com/dotkernel/dot-controller",
     "keywords": [
         "controller",
         "plugin",
@@ -12,7 +13,7 @@
     ],
     "authors": [
         {
-            "name": "dotkernel",
+            "name": "DotKernel Team",
             "email": "team@dotkernel.com"
         }
     ],
@@ -37,12 +38,6 @@
     "autoload-dev": {
         "psr-4": {
             "DotTest\\Controller\\": "test/"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0-dev",
-            "dev-develop": "2.1-dev"
         }
     }
 }
