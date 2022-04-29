@@ -2,6 +2,14 @@
 
 This package contains controller like middleware to be used inside a DotKernel or Mezzio application. It provides base classes for action based controllers similar to Laminas controller component. It is more lightweight though, but supports controller plugins.
 
+![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-controller)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/3.2.0)
+
+[![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/issues)
+[![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/network)
+[![GitHub stars](https://img.shields.io/github/stars/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/stargazers)
+[![GitHub license](https://img.shields.io/github/license/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/blob/3.0/LICENSE.md)
+
 ## Installation
 
 Run the following composer command in your project directory
@@ -58,7 +66,7 @@ Controllers support controller plugins, much like controllers in a Laminas appli
 
 ### Usage
 
-Controller plugins must implement `Dot\Controller\Plugin\PluginInterface`. You can add them to the config file, at key `['dk_controller']['plugin_manager']`. The design pattern uses the `AbstractPluginManager` provided by ZF3 service manager component. So, registration of a plugin under the aforementioned config key looks the same as the declaration of regular dependencies, as `AbstractPluginManager` actually extends `ServiceManager`.
+Controller plugins must implement `Dot\Controller\Plugin\PluginInterface`. You can add them to the config file, at key `['dk_controller']['plugin_manager']`. The design pattern uses the `AbstractPluginManager` provided by Laminas service manager component. So, registration of a plugin under the aforementioned config key looks the same as the declaration of regular dependencies, as `AbstractPluginManager` actually extends `ServiceManager`.
 
 Once registered, a plugin can be directly accessed in any controller, by calling a method with the plugin's name(the service name or the key at which the plugin is registered inside the manager)
 
