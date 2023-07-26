@@ -1,36 +1,24 @@
 <?php
-/**
- * @see https://github.com/dotkernel/dot-controller/ for the canonical source repository
- * @copyright Copyright (c) 2017 Apidemia (https://www.apidemia.com)
- * @license https://github.com/dotkernel/dot-controller/blob/master/LICENSE.md MIT License
- */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Dot\Controller\Plugin;
 
 use Mezzio\Helper\UrlHelper;
 
-/**
- * Class UrlHelperPlugin
- * @package Dot\Controller\Plugin
- */
+use function func_get_args;
+
 class UrlHelperPlugin implements PluginInterface
 {
     /** @var UrlHelper */
     protected $urlHelper;
 
-    /**
-     * UrlHelperPlugin constructor.
-     * @param UrlHelper $helper
-     */
     public function __construct(UrlHelper $helper)
     {
         $this->urlHelper = $helper;
     }
 
     /**
-     * @param string|null $routeName
      * @param array $routeParams
      * @param array $queryParams
      * @param null $fragmentIdentifier
@@ -38,7 +26,7 @@ class UrlHelperPlugin implements PluginInterface
      * @return UrlHelperPlugin|string
      */
     public function __invoke(
-        string $routeName = null,
+        ?string $routeName = null,
         array $routeParams = [],
         $queryParams = [],
         $fragmentIdentifier = null,
@@ -53,15 +41,13 @@ class UrlHelperPlugin implements PluginInterface
     }
 
     /**
-     * @param string|null $routeName
      * @param array $routeParams
      * @param array $queryParams
      * @param null $fragmentIdentifier
      * @param array $options
-     * @return string
      */
     public function generate(
-        string $routeName = null,
+        ?string $routeName = null,
         array $routeParams = [],
         $queryParams = [],
         $fragmentIdentifier = null,

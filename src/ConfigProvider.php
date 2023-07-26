@@ -16,17 +16,13 @@ class ConfigProvider
      *
      * To add a bit of a structure, each section is defined in a separate
      * method which returns an array with its configuration.
-     *
      */
     public function __invoke(): array
     {
         return [
-            'dependencies' => $this->getDependenciesConfig(),
-
+            'dependencies'   => $this->getDependenciesConfig(),
             'dot_controller' => [
-
-                'plugin_manager' => [],
-
+                'plugin_manager'  => [],
                 'event_listeners' => [],
             ],
         ];
@@ -35,13 +31,13 @@ class ConfigProvider
     public function getDependenciesConfig(): array
     {
         return [
-            'factories' => [
+            'factories'    => [
                 PluginManager::class => PluginManagerFactory::class,
             ],
             'initializers' => [
                 PluginManagerAwareInitializer::class,
                 ControllerEventListenersInitializer::class,
-            ]
+            ],
         ];
     }
 }

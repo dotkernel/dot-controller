@@ -1,23 +1,42 @@
 <?php
-/**
- * @see https://github.com/dotkernel/dot-controller/ for the canonical source repository
- * @copyright Copyright (c) 2017 Apidemia (https://www.apidemia.com)
- * @license https://github.com/dotkernel/dot-controller/blob/master/LICENSE.md MIT License
- */
+
+declare(strict_types=1);
 
 namespace DotTest\Controller;
 
-/**
- * Class AbstractControllerTest
- * @package DotTest\Controller
- */
-class AbstractControllerTest extends \PHPUnit_Framework_TestCase
+use Dot\Controller\AbstractController as Subject;
+use Dot\Controller\Exception\RuntimeException;
+use Dot\Controller\Plugin\PluginManager;
+use PHPUnit\Framework\TestCase;
+
+class AbstractControllerTest extends TestCase
 {
-    /**
-     * TODO: complete tests
-     */
-    public function testSomething()
+    private PluginManager $pluginManager;
+    private Subject $subject;
+
+    public function setUp(): void
     {
-        //...
+        $this->pluginManager = $this->createMock(PluginManager::class);
+        $this->subject       = $this->getMockBuilder(Subject::class)
+                                    ->getMockForAbstractClass();
+    }
+
+    public function testGetMethodFromAction()
+    {
+        $testAction = 'test.this-action_name';
+        $method     = Subject::getMethodFromAction($testAction);
+        $this->assertSame('testThisActionNameAction', $method);
+    }
+
+    public function testGetPluginManager()
+    {
+        $this->subject->setPluginManager($this->pluginManager);
+        $this->assertInstanceOf(PluginManager::class, $this->subject->getPluginManager());
+    }
+
+    public function testNoPluginManager()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->subject->getPluginManager();
     }
 }

@@ -1,29 +1,27 @@
 <?php
-/**
- * @see https://github.com/dotkernel/dot-controller/ for the canonical source repository
- * @copyright Copyright (c) 2017 Apidemia (https://www.apidemia.com)
- * @license https://github.com/dotkernel/dot-controller/blob/master/LICENSE.md MIT License
- */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Dot\Controller;
+
 use Dot\Controller\Event\DispatchControllerEventsTrait;
 use Dot\Controller\Exception\RuntimeException;
 use Dot\Controller\Plugin\PluginInterface;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
+use Laminas\EventManager\EventManagerAwareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Laminas\EventManager\EventManagerAwareInterface;
 
+use function call_user_func_array;
+use function is_callable;
+use function lcfirst;
+use function sprintf;
+use function str_replace;
+use function ucwords;
 
-/**
- * Class AbstractController
- * @package Dot\Controller
- */
 abstract class AbstractController implements
     MiddlewareInterface,
     PluginManagerAwareInterface,
@@ -40,15 +38,11 @@ abstract class AbstractController implements
     /** @var RequestHandlerInterface */
     protected $handler;
 
-
     /** @var bool */
     protected $debug = false;
 
     /**
      * Transform an "action" token into a method name
-     *
-     * @param  string $action
-     * @return string
      */
     public static function getMethodFromAction(string $action): string
     {
@@ -56,8 +50,7 @@ abstract class AbstractController implements
         $method = ucwords($method);
         $method = str_replace(' ', '', $method);
         $method = lcfirst($method);
-        $method .= 'Action';
-        return $method;
+        return $method . 'Action';
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -70,17 +63,11 @@ abstract class AbstractController implements
 
     abstract public function dispatch(): ResponseInterface;
 
-    /**
-     * @return ServerRequestInterface
-     */
     public function getRequest(): ServerRequestInterface
     {
         return $this->request;
     }
 
-    /**
-     * @return RequestHandlerInterface
-     */
     public function getHandler(): RequestHandlerInterface
     {
         return $this->handler;
@@ -92,7 +79,6 @@ abstract class AbstractController implements
      * If the plugin is a functor, call it, passing the parameters provided.
      * Otherwise, return the plugin instance.
      *
-     * @param  string $method
      * @param  array $params
      * @return mixed
      */
@@ -110,51 +96,38 @@ abstract class AbstractController implements
      *
      * @param  string $name Name of plugin to return
      * @param  array $options Options to pass to plugin constructor (if not already instantiated)
-     * @return PluginInterface|callable
      */
-    public function plugin(string $name, array $options = []): PluginInterface
+    public function plugin(string $name, array $options = []): PluginInterface|callable
     {
         return $this->getPluginManager()->get($name, $options);
     }
 
-    /**
-     * @return PluginManager
-     */
     public function getPluginManager(): PluginManager
     {
-        if (!$this->pluginManager) {
+        if (! $this->pluginManager) {
             throw new RuntimeException(
                 sprintf(
-                    'Controller plugin manager not set for controller `%s`.' .
-                    ' Enable the controller module by merging' .
-                    ' its ConfigProvider and make sure the controller is registered in the service manager',
-                    get_class($this)
+                    'Controller plugin manager not set for controller `%s`.'
+                    . ' Enable the controller module by merging'
+                    . ' its ConfigProvider and make sure the controller is registered in the service manager',
+                    static::class
                 )
             );
         }
-        
+
         return $this->pluginManager;
     }
 
-    /**
-     * @param PluginManager $pluginManager
-     */
-    public function setPluginManager(PluginManager $pluginManager)
+    public function setPluginManager(PluginManager $plugins)
     {
-        $this->pluginManager = $pluginManager;
+        $this->pluginManager = $plugins;
     }
 
-    /**
-     * @return bool
-     */
     public function isDebug(): bool
     {
         return $this->debug;
     }
 
-    /**
-     * @param bool $debug
-     */
     public function setDebug(bool $debug)
     {
         $this->debug = $debug;

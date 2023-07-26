@@ -1,27 +1,17 @@
 <?php
-/**
- * @see https://github.com/dotkernel/dot-controller/ for the canonical source repository
- * @copyright Copyright (c) 2017 Apidemia (https://www.apidemia.com)
- * @license https://github.com/dotkernel/dot-controller/blob/master/LICENSE.md MIT License
- */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Dot\Controller\Event;
 
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 
-/**
- * Class ControllerEventListenerTrait
- * @package Dot\Controller\Event
- */
 trait ControllerEventListenerTrait
 {
     use ListenerAggregateTrait;
 
     /**
-     * @param EventManagerInterface $events
      * @param int $priority
      */
     public function attach(EventManagerInterface $events, $priority = 1)

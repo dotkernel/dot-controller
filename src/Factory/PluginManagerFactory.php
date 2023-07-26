@@ -1,29 +1,19 @@
 <?php
-/**
- * @see https://github.com/dotkernel/dot-controller/ for the canonical source repository
- * @copyright Copyright (c) 2017 Apidemia (https://www.apidemia.com)
- * @license https://github.com/dotkernel/dot-controller/blob/master/LICENSE.md MIT License
- */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Dot\Controller\Factory;
 
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\TemplatePlugin;
 use Dot\Controller\Plugin\UrlHelperPlugin;
-use Psr\Container\ContainerInterface;
 use Mezzio\Helper\UrlHelper;
 use Mezzio\Template\TemplateRendererInterface;
+use Psr\Container\ContainerInterface;
 
-/**
- * Class PluginManagerFactory
- * @package Dot\Controller\Factory
- */
 class PluginManagerFactory
 {
     /**
-     * @param ContainerInterface $container
      * @return PluginManager
      */
     public function __invoke(ContainerInterface $container)
