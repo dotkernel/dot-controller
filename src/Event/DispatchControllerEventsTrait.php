@@ -14,13 +14,11 @@ trait DispatchControllerEventsTrait
 {
     use EventManagerAwareTrait;
 
-    /**
-     * @param array $data
-     * @param null $target
-     * @return ControllerEvent|ResponseCollection
-     */
-    public function dispatchEvent(string $name, array $data = [], $target = null)
-    {
+    public function dispatchEvent(
+        string $name,
+        array $data = [],
+        object|string|null $target = null
+    ): ControllerEvent|ResponseCollection {
         if (! $this instanceof AbstractController) {
             throw new RuntimeException('Only controllers can dispatch controller events');
         }

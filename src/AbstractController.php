@@ -29,17 +29,13 @@ abstract class AbstractController implements
 {
     use DispatchControllerEventsTrait;
 
-    /** @var  PluginManager */
-    protected $pluginManager;
+    protected ?PluginManager $pluginManager = null;
 
-    /** @var  ServerRequestInterface */
-    protected $request;
+    protected ServerRequestInterface $request;
 
-    /** @var RequestHandlerInterface */
-    protected $handler;
+    protected RequestHandlerInterface $handler;
 
-    /** @var bool */
-    protected $debug = false;
+    protected bool $debug = false;
 
     /**
      * Transform an "action" token into a method name
@@ -78,11 +74,8 @@ abstract class AbstractController implements
      *
      * If the plugin is a functor, call it, passing the parameters provided.
      * Otherwise, return the plugin instance.
-     *
-     * @param  array $params
-     * @return mixed
      */
-    public function __call(string $method, array $params)
+    public function __call(string $method, array $params): mixed
     {
         $plugin = $this->plugin($method);
         if (is_callable($plugin)) {
@@ -93,16 +86,13 @@ abstract class AbstractController implements
 
     /**
      * Get plugin instance
-     *
-     * @param  string $name Name of plugin to return
-     * @param  array $options Options to pass to plugin constructor (if not already instantiated)
      */
     public function plugin(string $name, array $options = []): PluginInterface|callable
     {
         return $this->getPluginManager()->get($name, $options);
     }
 
-    public function getPluginManager(): PluginManager
+    public function getPluginManager(): ?PluginManager
     {
         if (! $this->pluginManager) {
             throw new RuntimeException(
@@ -118,7 +108,7 @@ abstract class AbstractController implements
         return $this->pluginManager;
     }
 
-    public function setPluginManager(PluginManager $plugins)
+    public function setPluginManager(PluginManager $plugins): void
     {
         $this->pluginManager = $plugins;
     }
@@ -128,7 +118,7 @@ abstract class AbstractController implements
         return $this->debug;
     }
 
-    public function setDebug(bool $debug)
+    public function setDebug(bool $debug): void
     {
         $this->debug = $debug;
     }

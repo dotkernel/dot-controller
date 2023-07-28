@@ -31,6 +31,10 @@ class ConfigProviderTest extends TestCase
     {
         $this->assertArrayHasKey('factories', $this->config['dependencies']);
         $this->assertArrayHasKey(PluginManager::class, $this->config['dependencies']['factories']);
+    }
+
+    public function testDependenciesHasInitializers(): void
+    {
         $this->assertArrayHasKey('initializers', $this->config['dependencies']);
         $this->assertContainsEquals(
             PluginManagerAwareInitializer::class,

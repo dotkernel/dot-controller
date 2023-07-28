@@ -4,15 +4,9 @@ declare(strict_types=1);
 
 namespace Dot\Controller\Plugin;
 
-/**
- * Interface PluginManagerAwareInterface
- */
 interface PluginManagerAwareInterface
 {
-    /**
-     * @return void
-     */
-    public function setPluginManager(PluginManager $plugins);
+    public function setPluginManager(PluginManager $plugins): void;
 
-    public function getPluginManager(): PluginManager;
+    public function getPluginManager(): ?PluginManager;
 }

@@ -7,7 +7,9 @@ namespace Dot\Controller\Factory;
 use Dot\Controller\AbstractController;
 use Dot\Controller\Event\ControllerEventListenerInterface;
 use Dot\Controller\Exception\RuntimeException;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 use function class_exists;
 use function gettype;
@@ -18,14 +20,22 @@ use function sprintf;
 
 class ControllerEventListenersInitializer
 {
-    public function __invoke(ContainerInterface $container, ?AbstractController $instance)
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function __invoke(ContainerInterface $container, ?AbstractController $instance): void
     {
         if ($instance instanceof AbstractController) {
             $this->attachControllerListeners($container, $instance);
         }
     }
 
-    public function attachControllerListeners(ContainerInterface $container, AbstractController $controller)
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function attachControllerListeners(ContainerInterface $container, AbstractController $controller): void
     {
         $config = $container->get('config')['dot_controller'];
 
@@ -57,6 +67,10 @@ class ControllerEventListenersInitializer
         }
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function getControllerListener(
         ContainerInterface $container,
         string $listenerName

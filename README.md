@@ -3,12 +3,16 @@
 This package contains controller like middleware to be used inside a DotKernel or Mezzio application. It provides base classes for action based controllers similar to Laminas controller component. It is more lightweight though, but supports controller plugins.
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-controller)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/3.2.0)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/3.4.0)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/network)
 [![GitHub stars](https://img.shields.io/github/stars/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/stargazers)
 [![GitHub license](https://img.shields.io/github/license/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/blob/3.0/LICENSE.md)
+
+[![Build Static](https://github.com/dotkernel/dot-auth-social/actions/workflows/static-analysis.yml/badge.svg?branch=1.0)](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml)
+
+[![SymfonyInsight](https://insight.symfony.com/projects/c4aac671-40d7-4590-b1fa-b3e46a1e3f43/big.svg)](https://insight.symfony.com/projects/c4aac671-40d7-4590-b1fa-b3e46a1e3f43)
 
 ## Installation
 

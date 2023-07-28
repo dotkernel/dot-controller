@@ -14,7 +14,7 @@ trait ControllerEventListenerTrait
     /**
      * @param int $priority
      */
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1): void
     {
         $this->listeners[] = $events->attach(
             ControllerEvent::EVENT_CONTROLLER_BEFORE_DISPATCH,
@@ -28,13 +28,11 @@ trait ControllerEventListenerTrait
         );
     }
 
-    public function onBeforeDispatch(ControllerEvent $e)
+    public function onBeforeDispatch(ControllerEvent $e): void
     {
-        //no-op
     }
 
-    public function onAfterDispatch(ControllerEvent $e)
+    public function onAfterDispatch(ControllerEvent $e): void
     {
-        //no-op
     }
 }
