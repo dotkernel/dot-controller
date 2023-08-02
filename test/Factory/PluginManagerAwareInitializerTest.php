@@ -8,8 +8,10 @@ use Dot\Controller\AbstractController;
 use Dot\Controller\Factory\PluginManagerAwareInitializer as Subject;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
+use Laminas\Diactoros\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class PluginManagerAwareInitializerTest extends TestCase
 {
@@ -47,8 +49,12 @@ class PluginManagerAwareInitializerTest extends TestCase
                 ['config', ['debug' => true]],
             ]);
 
-        $instance = $this->getMockBuilder(AbstractController::class)
-            ->getMockForAbstractClass();
+        $instance = new class extends AbstractController {
+            public function dispatch(): ResponseInterface
+            {
+                return new Response();
+            }
+        };
 
         $this->subject->__invoke($this->container, $instance);
 
