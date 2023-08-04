@@ -6,13 +6,18 @@ namespace DotTest\Controller\Plugin;
 
 use Dot\Controller\Plugin\TemplatePlugin as Subject;
 use Mezzio\Template\TemplateRendererInterface;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TemplatePluginTest extends TestCase
 {
-    protected TemplateRendererInterface $templateRenderer;
+    protected TemplateRendererInterface|MockObject $templateRenderer;
     protected Subject $subject;
 
+    /**
+     * @throws Exception
+     */
     protected function setup(): void
     {
         $this->templateRenderer = $this->createMock(TemplateRendererInterface::class);

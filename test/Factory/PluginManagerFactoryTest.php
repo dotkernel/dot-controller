@@ -10,24 +10,35 @@ use Dot\Controller\Plugin\TemplatePlugin;
 use Dot\Controller\Plugin\UrlHelperPlugin;
 use Mezzio\Helper\UrlHelper;
 use Mezzio\Template\TemplateRendererInterface;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class PluginManagerFactoryTest extends TestCase
 {
     private Subject $subject;
-    private ContainerInterface $container;
-    private TemplateRendererInterface $templateRenderer;
-    private UrlHelper $urlHelper;
+    private ContainerInterface|MockObject $container;
+    private TemplateRendererInterface|MockObject $templateRenderer;
+    private UrlHelper|MockObject $urlHelper;
+
+    /**
+     * @throws Exception
+     */
     public function setUp(): void
     {
         $this->subject          = new Subject();
         $this->container        = $this->createMock(ContainerInterface::class);
-        $this->pluginManager    = $this->createMock(PluginManager::class);
         $this->templateRenderer = $this->createMock(TemplateRendererInterface::class);
         $this->urlHelper        = $this->createMock(UrlHelper::class);
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function testInvokeWithUrlHelper(): void
     {
         $config = [
@@ -55,6 +66,10 @@ class PluginManagerFactoryTest extends TestCase
         $this->assertInstanceOf(UrlHelperPlugin::class, $pluginManager->get('url'));
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function testInvokeWithTemplateRenderer(): void
     {
         $config = [

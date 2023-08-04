@@ -8,16 +8,23 @@ use Dot\Controller\AbstractController;
 use Dot\Controller\Event\ControllerEventListenerInterface;
 use Dot\Controller\Factory\ControllerEventListenersInitializer as Subject;
 use Laminas\EventManager\EventManager;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class ControllerEventListenersInitializerTest extends TestCase
 {
-    private ContainerInterface $container;
-    private AbstractController $controller;
-    private EventManager $eventManager;
+    private ContainerInterface|MockObject $container;
+    private AbstractController|MockObject $controller;
+    private EventManager|MockObject $eventManager;
     private Subject $subject;
 
+    /**
+     * @throws Exception
+     */
     public function setUp(): void
     {
         $this->container    = $this->createMock(ContainerInterface::class);
@@ -26,6 +33,11 @@ class ControllerEventListenersInitializerTest extends TestCase
         $this->subject      = new Subject();
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Exception
+     */
     public function testAttachControllerListeners(): void
     {
         $config = [

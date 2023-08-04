@@ -90,8 +90,3 @@ Although these are optional, if a package is missing, the controller will not ha
 
 - `template` wraps TemplateInterface provided by Mezzio, to make template engine accessible to any controller
 - `url` wraps the UrlHelper class provided by Laminas helpers package. Used to generate URIs from routes
-
-
-## Controller Events
-
-// @TODO

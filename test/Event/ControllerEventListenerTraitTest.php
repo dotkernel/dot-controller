@@ -36,7 +36,7 @@ class ControllerEventListenerTraitTest extends TestCase
         };
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         $eventManager = $this->traitObject->getEventManager();
 

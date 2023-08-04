@@ -9,15 +9,23 @@ use Dot\Controller\Factory\PluginManagerAwareInitializer as Subject;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
 use Laminas\Diactoros\Response;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class PluginManagerAwareInitializerTest extends TestCase
 {
     private Subject $subject;
-    private ContainerInterface $container;
-    private PluginManager $pluginManager;
+    private ContainerInterface|MockObject $container;
+    private PluginManager|MockObject $pluginManager;
+
+    /**
+     * @throws Exception
+     */
     public function setUp(): void
     {
         $this->subject       = new Subject();
@@ -25,6 +33,11 @@ class PluginManagerAwareInitializerTest extends TestCase
         $this->pluginManager = $this->createMock(PluginManager::class);
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Exception
+     */
     public function testInvokeSetsPluginManagerWhenInstanceIsPluginManagerAwareInterface(): void
     {
         $this->container->expects($this->once())
@@ -41,6 +54,10 @@ class PluginManagerAwareInitializerTest extends TestCase
         $this->subject->__invoke($this->container, $instance);
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function testInvokeSetsDebugFlagWhenInstanceIsAbstractController(): void
     {
         $this->container->method('get')
