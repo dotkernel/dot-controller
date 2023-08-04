@@ -7,6 +7,7 @@ namespace DotTest\Controller\Event;
 use Dot\Controller\Event\ControllerEvent;
 use Dot\Controller\Event\ControllerEventListenerTrait as Subject;
 use Laminas\EventManager\EventManagerInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 use function is_callable;
@@ -15,6 +16,9 @@ class ControllerEventListenerTraitTest extends TestCase
 {
     private object $traitObject;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $eventManager = $this->createMock(EventManagerInterface::class);
