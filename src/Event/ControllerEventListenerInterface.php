@@ -1,31 +1,16 @@
 <?php
-/**
- * @see https://github.com/dotkernel/dot-controller/ for the canonical source repository
- * @copyright Copyright (c) 2017 Apidemia (https://www.apidemia.com)
- * @license https://github.com/dotkernel/dot-controller/blob/master/LICENSE.md MIT License
- */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Dot\Controller\Event;
 
 use Laminas\EventManager\ListenerAggregateInterface;
 
-/**
- * Interface ActionControllerEventListenerInterface
- * @package Dot\Controller\Event
- */
 interface ControllerEventListenerInterface extends ListenerAggregateInterface
 {
-    const LISTEN_ALL = 1;
+    public const LISTEN_ALL = 1;
 
-    /**
-     * @param ControllerEvent $e
-     */
-    public function onBeforeDispatch(ControllerEvent $e);
+    public function onBeforeDispatch(ControllerEvent $e): void;
 
-    /**
-     * @param ControllerEvent $e
-     */
-    public function onAfterDispatch(ControllerEvent $e);
+    public function onAfterDispatch(ControllerEvent $e): void;
 }
