@@ -24,7 +24,7 @@ class ControllerEventListenersInitializer
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function __invoke(ContainerInterface $container, ?AbstractController $instance): void
+    public function __invoke(ContainerInterface $container, mixed $instance): void
     {
         if ($instance instanceof AbstractController) {
             $this->attachControllerListeners($container, $instance);
