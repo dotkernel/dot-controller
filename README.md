@@ -3,7 +3,7 @@
 This package contains controller like middleware to be used inside a DotKernel or Mezzio application. It provides base classes for action based controllers similar to Laminas controller component. It is more lightweight though, but supports controller plugins.
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-controller)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/3.4.2)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/3.4.3)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/network)
