@@ -1,0 +1,19 @@
+docs_dir: docs/book
+site_dir: docs/html
+extra:
+  project: Packages
+  current_version: v3
+  versions:
+    - v3
+nav:
+  - Home: index.md
+  - v3:
+      - Overview: v5/overview.md
+      - Installation: v5/installation.md
+      - Configuration: v5/configuration.md
+      - Usage: v5/usage.md
+      - Plugins: v5/plugins/plugins.md
+      - Events: v5/events/events.md
+site_name: dot-controller
+site_description: "DotKernel's controller package"
+repo_url: "https://github.com/dotkernel/dot-controller"
