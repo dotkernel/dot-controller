@@ -19,6 +19,7 @@ It provides base classes for action based controllers similar to Laminas control
 ## Installation
 
 Install `dot-controller` by executing the following Composer command:
+
 ```bash 
 $ composer require dotkernel/dot-controller
 ```
@@ -26,18 +27,17 @@ $ composer require dotkernel/dot-controller
 ## Usage
 
 Middleware controllers act as a handler for multiple routes. Some conventions were made:
+
 - register controllers in the routes array just like any mezzio middleware. The requirement is that you should define an `action` route parameter(possibly optional) anywhere inside the route(e.g `/user[/{action}]`)
 - action parameter value is converted to a method name inside the controller. Underscore, dot and line characters are removed and the action name is converted to camel-case suffixed by the string `Action`. For example a route and action pair like `/user/forgot-password` will be converted to method `forgotPasswordAction`.
 - the default action value, if not present in the URI is `index`, so you should always define an `indexAction` within your controllers for displaying a default page or redirecting.
 
 In order to create your action based controllers, you must extend the abstract class `DotKernel\DotController\AbstractActionController`
 
-##### Example
+### Example
 Creating a UserController with default action and a register action. Will handle routes `/user` and `/user/register`
 
-##### UserController.php
 ```php
-
 use DotKernel\DotController\AbstractActionController;
 
 class UserController extends AbstractActionController
@@ -69,6 +69,7 @@ $app->route(
 ### Multiple controllers for the same route
 
 Use case: You have defined a controller inside some package, with default actions. You want to add actions that fall into the same controller name(or route name more exactly). You want to do this without extending the controller provided by the package. In this case you can do the following
+
 - create your own controller, independent of the package's controller which adds more actions
 - Mezzio lets you define an array of middleware for a route, so you can register this controller before the package's controller
 

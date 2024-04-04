@@ -13,6 +13,7 @@ Controller plugins offer the advantage of globally accessible functionality in a
 ### Example
 
 First we create our desired plugin, for our example a string helper 
+
 ```php
 class StringPlugin implements PluginInterface
 {
@@ -26,6 +27,7 @@ class StringPlugin implements PluginInterface
 ```
 
 We create a factory for the plugin
+
 ```php
 use Psr\Container\ContainerInterface;
 
@@ -41,6 +43,7 @@ class StringPluginFactory
 ```
 
 Register the factory under the `['dot_controller']['plugin_manager']['factories']` key.
+
 ```php
 'dot_controller' => [
     'plugin_manager' => [
@@ -50,9 +53,11 @@ Register the factory under the `['dot_controller']['plugin_manager']['factories'
     ]
 ]
 ```
+
 You don't need to register the plugin factory to a regular dependencies in a configuration because `AbstractPluginManager` actually extends `ServiceManager`
 
 Access it in a controller.
+
 ```php
 //inside a controller 
 $this->string(); // will return the StringPlugin class, so you can call any public method from it
@@ -60,11 +65,13 @@ $this->string()->toUpper("test") // will return TEST
 ```
 
 ## Build-in plugins
+
 The package comes in with 2 default plugins ``template`` and `url`. You can use 
 them in the same way as our example above.
 
 - Url plugin
 - - the plugin is an instance of `Mezzio\Helper\UrlHelper`
+
 ```php
     //in a controller action 
     /** @var UrlHelper $url */
@@ -74,6 +81,7 @@ them in the same way as our example above.
 
 - Template plugin
 - - the plugin is an instance of `Mezzio\Template\TemplateRendererInterface`
+
 ```php
     // in a controller action
     return new HtmlResponse(

@@ -8,12 +8,12 @@ extra:
 nav:
   - Home: index.md
   - v3:
-      - Overview: v5/overview.md
-      - Installation: v5/installation.md
-      - Configuration: v5/configuration.md
-      - Usage: v5/usage.md
-      - Plugins: v5/plugins/plugins.md
-      - Events: v5/events/events.md
+      - Overview: v3/overview.md
+      - Installation: v3/installation.md
+      - Configuration: v3/configuration.md
+      - Usage: v3/usage.md
+      - Plugins: v3/plugins.md
+      - Events: v3/events.md
 site_name: dot-controller
 site_description: "DotKernel's controller package"
 repo_url: "https://github.com/dotkernel/dot-controller"
