@@ -101,7 +101,7 @@ public function onAfterDispatch(ControllerEvent $e): void
     }
 ```
 
-So every time the `updateAction` is accessed and the method is post, 
+So every time the `updateAction` is accessed and the method is post,
 right after the action is dispatched, we can log that the user was updated.
 
 We can use the `onBeforeDispatch` in the same way, to log right before the user is updated.
@@ -136,8 +136,8 @@ class UserUpdatedListener implements ControllerEventListenerInterface
 }
 ```
 
-The `attach` method is from the `ListenerAggregateInterface` which `ControllerEventListenerTrait` 
-already is overriding it so can be used in a global way with `onBeforeDispatch` and `onAfterDispatch` 
+The `attach` method is from the `ListenerAggregateInterface` which `ControllerEventListenerTrait`
+already is overriding it so can be used in a global way with `onBeforeDispatch` and `onAfterDispatch`
 methods, but we can make our custom event and bind it to our method.
 
 In this case we create attach an event called `user.profile.update` and bind it to the `userProfileUpdated`  method.
