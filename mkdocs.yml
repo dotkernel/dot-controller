@@ -17,3 +17,5 @@ nav:
 site_name: dot-controller
 site_description: "DotKernel's controller package"
 repo_url: "https://github.com/dotkernel/dot-controller"
+plugins:
+  - search

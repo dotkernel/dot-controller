@@ -9,6 +9,7 @@ Middleware controllers act as a handler for multiple routes. Some conventions we
 In order to create your action based controllers, you must extend the abstract class `DotKernel\DotController\AbstractActionController`
 
 ## Example
+
 Creating a UserController with default action and a register action. Will handle routes `/user` and `/user/register`
 
 ```php

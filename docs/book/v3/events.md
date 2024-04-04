@@ -4,12 +4,11 @@ DotKernel's controller package supports events and those events can be of 2 type
 
 ## Getting started
 
-- Every event listener that is triggered from a controller 
+- Every event listener that is triggered from a controller
 needs to implement `Dot\Controller\Event\ControllerEventListenerInterface` which actually extends `Laminas\EventManager\ListenerAggregateInterface`.
 - You can add the trait `Dot\Controller\Event\ControllerEventListenerTrait` to override the method of the interface.
 - Every event listener needs to be registered under the `['dot_controller']['event_listenenrs]` key in the ConfigProvider, and every key must be the class that you want to attach the events
 
- 
 ## Usage
 
 The events in a controller can be done in 2 different ways, a global way where an event is attached automatically to all the controllers action and works in the same way the middlewares works
@@ -43,6 +42,7 @@ class UserController extends AbstractActionController
 ### Example 1 - Global way
 
 First we will create the event listener
+
 ```php
 use Dot\Controller\Event\ControllerEvent;
 use Dot\Controller\Event\ControllerEventListenerInterface;
@@ -84,9 +84,9 @@ after the controller is dispatched.
 
 With this it doesn't matter what action is accessed, the event it will run before and after the action.
 
-In addition, you can make use of the `event` variable to access information about the event. 
+In addition, you can make use of the `event` variable to access information about the event.
 
-For example: 
+For example:
 
 ```php
 // UserUpdatedListener
@@ -101,8 +101,10 @@ public function onAfterDispatch(ControllerEvent $e): void
     }
 ```
 
-So every time the `updateAction` is accessed and the method is post, right after the action is dispatched, we can log that the user was updated. <br>
-We can use the `onBeforeDispatch` in the same way, to log right before the user is updated. 
+So every time the `updateAction` is accessed and the method is post, 
+right after the action is dispatched, we can log that the user was updated.
+
+We can use the `onBeforeDispatch` in the same way, to log right before the user is updated.
 
 ### Example 2 - Manually triggered way
 
@@ -134,8 +136,10 @@ class UserUpdatedListener implements ControllerEventListenerInterface
 }
 ```
 
-The `attach` method is from the `ListenerAggregateInterface` which `ControllerEventListenerTrait` already is overriding it so can be used in a global way
-with `onBeforeDispatch` and `onAfterDispatch` methods, but we can make our custom event and bind it to our method. <br>
+The `attach` method is from the `ListenerAggregateInterface` which `ControllerEventListenerTrait` 
+already is overriding it so can be used in a global way with `onBeforeDispatch` and `onAfterDispatch` 
+methods, but we can make our custom event and bind it to our method.
+
 In this case we create attach an event called `user.profile.update` and bind it to the `userProfileUpdated`  method.
 
 Next we need to register the event
