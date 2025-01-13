@@ -4,12 +4,12 @@ This is DotKernel's controller package that can be use like middleware inside Do
 It provides base classes for action based controllers similar to Laminas controller component. It is more lightweight though, but supports controller plugins and event listeners
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-controller)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/3.6.0)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/4.0.0)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/network)
 [![GitHub stars](https://img.shields.io/github/stars/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/stargazers)
-[![GitHub license](https://img.shields.io/github/license/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/blob/3.0/LICENSE.md)
+[![GitHub license](https://img.shields.io/github/license/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/blob/4.0/LICENSE.md)
 
 [![Build Static](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml/badge.svg?branch=3.0)](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml)
 [![codecov](https://codecov.io/gh/dotkernel/dot-controller/graph/badge.svg?token=VUBG5LM4CK)](https://codecov.io/gh/dotkernel/dot-controller)
