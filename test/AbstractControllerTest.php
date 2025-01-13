@@ -83,7 +83,7 @@ class AbstractControllerTest extends TestCase
     public function testCallPlugin(): void
     {
         $this->pluginManager->expects($this->once())
-            ->method('get')
+            ->method('build')
             ->with('somePlugin')
             ->willReturn($this->plugin);
 
@@ -111,7 +111,7 @@ class AbstractControllerTest extends TestCase
         };
 
         $this->pluginManager->expects($this->once())
-            ->method('get')
+            ->method('build')
             ->with('callablePlugin')
             ->willReturn($mockCallablePlugin);
 
