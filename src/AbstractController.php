@@ -10,6 +10,7 @@ use Dot\Controller\Plugin\PluginInterface;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
 use Laminas\EventManager\EventManagerAwareInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -86,10 +87,12 @@ abstract class AbstractController implements
 
     /**
      * Get plugin instance
+     *
+     * @throws ContainerExceptionInterface
      */
-    public function plugin(string $name, array $options = []): PluginInterface|callable
+    public function plugin(string $name, array $options = []): PluginInterface|callable|null
     {
-        return $this->getPluginManager()->get($name, $options);
+        return $this->getPluginManager()?->build($name, $options);
     }
 
     public function getPluginManager(): ?PluginManager
