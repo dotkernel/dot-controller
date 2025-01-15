@@ -18,9 +18,11 @@
         <meta name="docsearch:component" content="dot-controller">
 
         
+        <link rel="canonical" href="https://docs.dotkernel.org/dot-controller/v4/usage/">
+        
         <link rel="shortcut icon" href="https://docs.dotkernel.org/img/dk_docs_favicon_white.svg">
 
-        <title>dot-controller - DotKernel Documentation</title>
+        <title>Usage - dot-controller - DotKernel Documentation</title>
 
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/bootstrap.css">
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/bootstrap-icons.min.css">
@@ -140,7 +142,7 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../v4/overview/" class="dropdown-item">
+                    <a href="../overview/" class="dropdown-item active">
                         
                             v4 (latest)
                         
@@ -148,7 +150,7 @@
                 
             
                 
-                    <a href="../v3/overview/" class="dropdown-item">
+                    <a href="../../v3/overview/" class="dropdown-item">
                         
                             v3
                         
@@ -174,11 +176,16 @@
                 
 
                 
-                    <li class="breadcrumb-item"><a href="../.">dot-controller</a></li>
+                    <li class="breadcrumb-item"><a href="../..">dot-controller</a></li>
 
                     
+                        
+                            
+                            
+                        
+                    
 
-                    <li class="breadcrumb-item active" aria-current="page"></li>
+                    <li class="breadcrumb-item active" aria-current="page">Usage</li>
                 
             
         </ol>
@@ -193,7 +200,7 @@
                     
     <div class="subnavigation hidden-print">
 <!--        <h4 class="subnavigation__title">-->
-<!--            <a href="../.">dot-controller</a>-->
+<!--            <a href="../..">dot-controller</a>-->
 <!--        </h4>-->
 
         <h5 class="subnavigation__title">Table of Contents</h5>
@@ -203,8 +210,42 @@
 
                 
                 
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../overview/" class="subnavigation__link">Overview</a>
+</li>
 
                     
+                        
+<li class="subnavigation__list-item ">
+    <a href="../installation/" class="subnavigation__link">Installation</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../configuration/" class="subnavigation__link">Configuration</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item subnavigation__list-item--active">
+    <a href="./" class="subnavigation__link">Usage</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../plugins/" class="subnavigation__link">Plugins</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../events/" class="subnavigation__link">Events</a>
+</li>
+
                     
                 
             
@@ -224,22 +265,123 @@
                     
                     
                     
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+            
+                <li class="toc__entry">
+                    <a href="#example" class="toc__link nav-link">Example</a>
+                </li>
+            
+                <li class="toc__entry">
+                    <a href="#plugins" class="toc__link nav-link">Plugins</a>
+                </li>
+            
+                <li class="toc__entry">
+                    <a href="#events" class="toc__link nav-link">Events</a>
+                </li>
+            
+            </ul>
+        </div>
+    
+
                     
                 </div>
                 <div class="col-lg-9 main_docs">
                     
-
-<h1 class="content__title">404</h1>
-<blockquote>
-    <h3>Something went wrong!</h3>
-    <p>
-        We're sorry, but the page you are looking for does not exist.
-    </p>
-</blockquote>
-
-<a href="../." class="btn btn-default" role="button">Go to homepage</a>
+                    
 
 
+
+
+    
+    
+
+    <h1 id="usage">Usage</h1>
+<p>Middleware controllers act as a handler for multiple routes. Some conventions were made:</p>
+<ul>
+<li>register controllers in the routes array just like any mezzio middleware. The requirement is that you should define an <code>action</code> route parameter(possibly optional) anywhere inside the route(e.g <code>/user[/{action}]</code>)</li>
+<li>action parameter value is converted to a method name inside the controller. Underscore, dot and line characters are removed and the action name is converted to camel-case suffixed by the string <code>Action</code>. For example a route and action pair like <code>/user/forgot-password</code> will be converted to method <code>forgotPasswordAction</code>.</li>
+<li>the default action value, if not present in the URI is <code>index</code>, so you should always define an <code>indexAction</code> within your controllers for displaying a default page or redirecting.</li>
+</ul>
+<p>In order to create your action based controllers, you must extend the abstract class <code>DotKernel\DotController\AbstractActionController</code></p>
+<h2 id="example">Example</h2>
+<p>Creating a UserController with default action and a register action. Will handle routes <code>/user</code> and <code>/user/register</code></p>
+<pre class="highlight"><code class="language-php">use DotKernel\DotController\AbstractActionController;
+
+class UserController extends AbstractActionController
+{
+    public function indexAction()
+    {
+        //...
+    }
+
+    public function registerAction()
+    {
+        //...
+    }
+}</code></pre>
+<p>Then register this controller as a routed middleware in file <code>RoutesDelegator.php</code> just like a regular middleware.</p>
+<pre class="highlight"><code class="language-php">//Example from a DotKernel RoutesDelegator
+$app-&gt;route(
+    '/user[/{action}]',
+    UserController::class,
+    [RequestMethodInterface::METHOD_GET, RequestMethodInterface::METHOD_POST],
+    'user'
+);</code></pre>
+<h3 id="multiple-controllers-for-the-same-route">Multiple controllers for the same route</h3>
+<p>Use case: You have defined a controller inside some package, with default actions. You want to add actions that fall into the same controller name(or route name more exactly). You want to do this without extending the controller provided by the package. In this case you can do the following</p>
+<ul>
+<li>create your own controller, independent of the package's controller which adds more actions</li>
+<li>Mezzio lets you define an array of middleware for a route, so you can register this controller before the package's controller</li>
+</ul>
+<p>Now when a request for this route comes in, your controller will run first. DotKernel controllers are designed to ignore requests that cannot be matched to one of its methods, so if no action matches, it will call the next middleware, in our case, the second controller.
+If this is the last controller, and action does not match here, it will go to the default 404 Not found page(handled by NotFoundDelegate)</p>
+<h2 id="plugins">Plugins</h2>
+<ul>
+<li><a href="../plugins/">Plugins</a></li>
+</ul>
+<h2 id="events">Events</h2>
+<ul>
+<li><a href="../events/">Events</a></li>
+</ul>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../configuration/">
+                    <small class="page-nav__label">Previous</small>
+                    <i class="bi bi-chevron-left"></i>
+                    Configuration
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../plugins/">
+                    <small class="page-nav__label">Next</small>
+                    Plugins
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+                    
                 </div>
             </div>
         </div>
@@ -353,7 +495,7 @@
 </footer>
 
         <script>
-            let base_url = '..',
+            let base_url = '../..',
                 project  = "packages",
                 siteName = 'dot-controller';
 

@@ -18,9 +18,11 @@
         <meta name="docsearch:component" content="dot-controller">
 
         
+        <link rel="canonical" href="https://docs.dotkernel.org/dot-controller/v4/events/">
+        
         <link rel="shortcut icon" href="https://docs.dotkernel.org/img/dk_docs_favicon_white.svg">
 
-        <title>dot-controller - DotKernel Documentation</title>
+        <title>Events - dot-controller - DotKernel Documentation</title>
 
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/bootstrap.css">
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/bootstrap-icons.min.css">
@@ -140,7 +142,7 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../v4/overview/" class="dropdown-item">
+                    <a href="../overview/" class="dropdown-item active">
                         
                             v4 (latest)
                         
@@ -148,7 +150,7 @@
                 
             
                 
-                    <a href="../v3/overview/" class="dropdown-item">
+                    <a href="../../v3/overview/" class="dropdown-item">
                         
                             v3
                         
@@ -174,11 +176,16 @@
                 
 
                 
-                    <li class="breadcrumb-item"><a href="../.">dot-controller</a></li>
+                    <li class="breadcrumb-item"><a href="../..">dot-controller</a></li>
 
                     
+                        
+                            
+                            
+                        
+                    
 
-                    <li class="breadcrumb-item active" aria-current="page"></li>
+                    <li class="breadcrumb-item active" aria-current="page">Events</li>
                 
             
         </ol>
@@ -193,7 +200,7 @@
                     
     <div class="subnavigation hidden-print">
 <!--        <h4 class="subnavigation__title">-->
-<!--            <a href="../.">dot-controller</a>-->
+<!--            <a href="../..">dot-controller</a>-->
 <!--        </h4>-->
 
         <h5 class="subnavigation__title">Table of Contents</h5>
@@ -203,8 +210,42 @@
 
                 
                 
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../overview/" class="subnavigation__link">Overview</a>
+</li>
 
                     
+                        
+<li class="subnavigation__list-item ">
+    <a href="../installation/" class="subnavigation__link">Installation</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../configuration/" class="subnavigation__link">Configuration</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../usage/" class="subnavigation__link">Usage</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../plugins/" class="subnavigation__link">Plugins</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item subnavigation__list-item--active">
+    <a href="./" class="subnavigation__link">Events</a>
+</li>
+
                     
                 
             
@@ -224,22 +265,206 @@
                     
                     
                     
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+            
+                <li class="toc__entry">
+                    <a href="#getting-started" class="toc__link nav-link">Getting started</a>
+                </li>
+            
+                <li class="toc__entry">
+                    <a href="#usage" class="toc__link nav-link">Usage</a>
+                </li>
+            
+            </ul>
+        </div>
+    
+
                     
                 </div>
                 <div class="col-lg-9 main_docs">
                     
-
-<h1 class="content__title">404</h1>
-<blockquote>
-    <h3>Something went wrong!</h3>
-    <p>
-        We're sorry, but the page you are looking for does not exist.
-    </p>
-</blockquote>
-
-<a href="../." class="btn btn-default" role="button">Go to homepage</a>
+                    
 
 
+
+
+    
+    
+
+    <h1 id="events">Events</h1>
+<p>DotKernel's controller package supports events and those events can be of 2 types: global events (middleware-like) or manually dispatch  events.</p>
+<h2 id="getting-started">Getting started</h2>
+<ul>
+<li>Every event listener that is triggered from a controller
+needs to implement <code>Dot\Controller\Event\ControllerEventListenerInterface</code> which actually extends <code>Laminas\EventManager\ListenerAggregateInterface</code>.</li>
+<li>You can add the trait <code>Dot\Controller\Event\ControllerEventListenerTrait</code> to override the method of the interface.</li>
+<li>Every event listener needs to be registered under the <code>['dot_controller']['event_listenenrs]</code> key in the ConfigProvider, and every key must be the class that you want to attach the events</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>The events in a controller can be done in 2 different ways, a global way where an event is attached automatically to all the controllers action and works in the same way the middlewares works
+or a manually dispatchable way, where you can define to which controller the events is attached, and you can trigger the event where you want.</p>
+<p>For our example we have a UserController with some methods in it</p>
+<pre class="highlight"><code class="language-php">use DotKernel\DotController\AbstractActionController;
+
+class UserController extends AbstractActionController
+{
+    public function indexAction()
+    {
+        //...
+    }
+
+    public function registerAction()
+    {
+        //...
+    }
+
+    // post method for updating the user
+    public function updateAction()
+    {
+
+    }
+}</code></pre>
+<h3 id="example-1-global-way">Example 1 - Global way</h3>
+<p>First we will create the event listener</p>
+<pre class="highlight"><code class="language-php">use Dot\Controller\Event\ControllerEvent;
+use Dot\Controller\Event\ControllerEventListenerInterface;
+use Dot\Controller\Event\ControllerEventListenerTrait;
+
+// for the logger we assume you will use your own logger and inject it
+
+class UserUpdatedListener implements ControllerEventListenerInterface
+{
+    use ControllerEventListenerTrait;
+
+    public function onBeforeDispatch(ControllerEvent $event): void
+    {
+        $this-&gt;logger-&gt;info('on before dispatch');
+    }
+
+    public function onAfterDispatch(ControllerEvent $event): void
+    {
+        $this-&gt;logger-&gt;info('on after dispatch');
+    }
+
+}</code></pre>
+<p>We register the event listener in the configuration key</p>
+<pre class="highlight"><code class="language-php">'dot_controller' =&gt; [
+    'event_listeners' =&gt; [
+        AccountController::class =&gt; [
+            UserUpdatedListener::class,
+        ]
+    ]
+]</code></pre>
+<p>As you can assume, <code>onBeforeDispatch</code> is triggered right before the controller is dispatched, and <code>onAfterDispatch</code> right
+after the controller is dispatched.</p>
+<p>With this it doesn't matter what action is accessed, the event it will run before and after the action.</p>
+<p>In addition, you can make use of the <code>event</code> variable to access information about the event.</p>
+<p>For example:</p>
+<pre class="highlight"><code class="language-php">// UserUpdatedListener
+public function onAfterDispatch(ControllerEvent $e): void
+    {
+        $method = $e-&gt;getTarget()-&gt;getRequest()-&gt;getMethod();
+        $action = $e-&gt;getParams()['method'];
+        if ($method == 'POST' &amp;&amp; $action == 'updateAction') {
+            $this-&gt;logger-&gt;info('this will trigger ');
+
+        }
+    }</code></pre>
+<p>So every time the <code>updateAction</code> is accessed and the method is post,
+right after the action is dispatched, we can log that the user was updated.</p>
+<p>We can use the <code>onBeforeDispatch</code> in the same way, to log right before the user is updated.</p>
+<h3 id="example-2-manually-triggered-way">Example 2 - Manually triggered way</h3>
+<pre class="highlight"><code class="language-php">use Dot\Controller\Event\ControllerEvent;
+use Dot\Controller\Event\ControllerEventListenerInterface;
+use Dot\Controller\Event\ControllerEventListenerTrait;
+
+// for the logger we assume you will use your own logger and inject it
+
+class UserUpdatedListener implements ControllerEventListenerInterface
+{
+    use ControllerEventListenerTrait;
+
+     public function attach(EventManagerInterface $events, $priority = 1): void
+    {
+        $this-&gt;listeners[] = $events-&gt;attach(
+            'user.profile.update',
+            [$this, 'userProfileUpdated'],
+            $priority
+        );
+    }
+
+    public function userProfileUpdated(ControllerEvent $event): void
+    {
+        $this-&gt;logger-&gt;info('User profile updated');
+    }
+
+}</code></pre>
+<p>The <code>attach</code> method is from the <code>ListenerAggregateInterface</code> which <code>ControllerEventListenerTrait</code>
+already is overriding it so can be used in a global way with <code>onBeforeDispatch</code> and <code>onAfterDispatch</code>
+methods, but we can make our custom event and bind it to our method.</p>
+<p>In this case we create attach an event called <code>user.profile.update</code> and bind it to the <code>userProfileUpdated</code>  method.</p>
+<p>Next we need to register the event</p>
+<pre class="highlight"><code class="language-php">'dot_controller' =&gt; [
+    'event_listeners' =&gt; [
+        AccountController::class =&gt; [
+            'user.profile.update' =&gt; UserUpdatedListener::class
+        ]
+    ]
+]</code></pre>
+<p>Now you can manually trigger the event from the controller using build in <code>dispatchEvent</code> method.</p>
+<pre class="highlight"><code class="language-php">// UserController
+// post method for updating the user
+public function updateAction()
+{
+    // logic
+    $this-&gt;dispatchEvent('user.profile.update', ['user' =&gt; $user]);
+
+}</code></pre>
+<p>As you can see we attach the <code>user</code> key to the parameters, so we can actually access it.</p>
+<pre class="highlight"><code class="language-php">    public function userProfileUpdated(ControllerEvent $event): void
+    {
+        $user = $event-&gt;getParams()['user'];
+        $this-&gt;logger-&gt;info('User profile updated', $user-&gt;toArray());
+    }</code></pre>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../plugins/">
+                    <small class="page-nav__label">Previous</small>
+                    <i class="bi bi-chevron-left"></i>
+                    Plugins
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../../v3/overview/">
+                    <small class="page-nav__label">Next</small>
+                    Overview
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+                    
                 </div>
             </div>
         </div>
@@ -353,7 +578,7 @@
 </footer>
 
         <script>
-            let base_url = '..',
+            let base_url = '../..',
                 project  = "packages",
                 siteName = 'dot-controller';
 

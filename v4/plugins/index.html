@@ -18,9 +18,11 @@
         <meta name="docsearch:component" content="dot-controller">
 
         
+        <link rel="canonical" href="https://docs.dotkernel.org/dot-controller/v4/plugins/">
+        
         <link rel="shortcut icon" href="https://docs.dotkernel.org/img/dk_docs_favicon_white.svg">
 
-        <title>dot-controller - DotKernel Documentation</title>
+        <title>Plugins - dot-controller - DotKernel Documentation</title>
 
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/bootstrap.css">
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/bootstrap-icons.min.css">
@@ -140,7 +142,7 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../v4/overview/" class="dropdown-item">
+                    <a href="../overview/" class="dropdown-item active">
                         
                             v4 (latest)
                         
@@ -148,7 +150,7 @@
                 
             
                 
-                    <a href="../v3/overview/" class="dropdown-item">
+                    <a href="../../v3/overview/" class="dropdown-item">
                         
                             v3
                         
@@ -174,11 +176,16 @@
                 
 
                 
-                    <li class="breadcrumb-item"><a href="../.">dot-controller</a></li>
+                    <li class="breadcrumb-item"><a href="../..">dot-controller</a></li>
 
                     
+                        
+                            
+                            
+                        
+                    
 
-                    <li class="breadcrumb-item active" aria-current="page"></li>
+                    <li class="breadcrumb-item active" aria-current="page">Plugins</li>
                 
             
         </ol>
@@ -193,7 +200,7 @@
                     
     <div class="subnavigation hidden-print">
 <!--        <h4 class="subnavigation__title">-->
-<!--            <a href="../.">dot-controller</a>-->
+<!--            <a href="../..">dot-controller</a>-->
 <!--        </h4>-->
 
         <h5 class="subnavigation__title">Table of Contents</h5>
@@ -203,8 +210,42 @@
 
                 
                 
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../overview/" class="subnavigation__link">Overview</a>
+</li>
 
                     
+                        
+<li class="subnavigation__list-item ">
+    <a href="../installation/" class="subnavigation__link">Installation</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../configuration/" class="subnavigation__link">Configuration</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../usage/" class="subnavigation__link">Usage</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item subnavigation__list-item--active">
+    <a href="./" class="subnavigation__link">Plugins</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../events/" class="subnavigation__link">Events</a>
+</li>
+
                     
                 
             
@@ -224,22 +265,140 @@
                     
                     
                     
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+            
+                <li class="toc__entry">
+                    <a href="#usage" class="toc__link nav-link">Usage</a>
+                </li>
+            
+                <li class="toc__entry">
+                    <a href="#build-in-plugins" class="toc__link nav-link">Build-in plugins</a>
+                </li>
+            
+            </ul>
+        </div>
+    
+
                     
                 </div>
                 <div class="col-lg-9 main_docs">
                     
-
-<h1 class="content__title">404</h1>
-<blockquote>
-    <h3>Something went wrong!</h3>
-    <p>
-        We're sorry, but the page you are looking for does not exist.
-    </p>
-</blockquote>
-
-<a href="../." class="btn btn-default" role="button">Go to homepage</a>
+                    
 
 
+
+
+    
+    
+
+    <h1 id="plugins">Plugins</h1>
+<p>DotKernel's controller support plugins, much like controllers in a Laminas Applications.
+The package comes packed with a few built in plugins, but you can extend controller functionality with your own plugins.</p>
+<h2 id="usage">Usage</h2>
+<p>Any controller plugins must implement <code>Dot\Controller\Plugin\PluginInterface</code>.
+You need to create a factory in addition to the plugin and register it
+under the <code>['dot_controller']['plugin_manager']['factories']</code> with the plugin name.</p>
+<p>Once registered, a plugin can be directly accessed in any controller,
+by calling a method with the plugin's name (the service name or the key at which the plugin is registered inside the manager)</p>
+<p>Controller plugins offer the advantage of globally accessible functionality
+in any controller without to manually inject dependencies.
+Plugins should be used for functions that are common to any controller.
+Do not clutter controller's code with unnecessary plugins.</p>
+<h3 id="example">Example</h3>
+<p>First we create our desired plugin, for our example a string helper</p>
+<pre class="highlight"><code class="language-php">class StringPlugin implements PluginInterface
+{
+
+    // any method inside the plugin needs to be public if you want to access it from a controller
+    public function toUpper(string $string): string
+    {
+        return strtoupper($string);
+    }
+}</code></pre>
+<p>We create a factory for the plugin</p>
+<pre class="highlight"><code class="language-php">use Psr\Container\ContainerInterface;
+
+class StringPluginFactory
+{
+
+    public function __invoke(ContainerInterface $container): StringPlugin
+    {
+        return new StringPlugin();
+    }
+
+}</code></pre>
+<p>Register the factory under the <code>['dot_controller']['plugin_manager']['factories']</code> key.</p>
+<pre class="highlight"><code class="language-php">'dot_controller' =&gt; [
+    'plugin_manager' =&gt; [
+        'factories' =&gt; [
+            'string' =&gt; StringPluginFactory::class
+        ]
+    ]
+]</code></pre>
+<p>You don't need to register the plugin factory to a regular dependencies in a configuration
+because <code>AbstractPluginManager</code> actually extends <code>ServiceManager</code></p>
+<p>Access it in a controller.</p>
+<pre class="highlight"><code class="language-php">//inside a controller 
+$this-&gt;string(); // will return the StringPlugin class, so you can call any public method from it
+$this-&gt;string()-&gt;toUpper("test") // will return TEST</code></pre>
+<h2 id="build-in-plugins">Build-in plugins</h2>
+<p>The package comes in with 2 default plugins <code>template</code> and <code>url</code>. You can use
+them in the same way as our example above.</p>
+<ul>
+<li><code>url</code> - the plugin is an instance of <code>Mezzio\Helper\UrlHelper</code></li>
+</ul>
+<pre class="highlight"><code class="language-php">    //in a controller action 
+    /** @var UrlHelper $url */
+    $url = $this-&gt;url();
+    echo $url-&gt;generate('account', ['action' =&gt; 'foo', 'hash' =&gt; 'bar'])</code></pre>
+<ul>
+<li><code>template</code> - the plugin is an instance of <code>Mezzio\Template\TemplateRendererInterface</code></li>
+</ul>
+<pre class="highlight"><code class="language-php">    // in a controller action
+    return new HtmlResponse(
+        $this-&gt;template-&gt;render('page::home', [
+            'foo' =&gt; 'bar'
+        ])
+    );</code></pre>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../usage/">
+                    <small class="page-nav__label">Previous</small>
+                    <i class="bi bi-chevron-left"></i>
+                    Usage
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../events/">
+                    <small class="page-nav__label">Next</small>
+                    Events
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+                    
                 </div>
             </div>
         </div>
@@ -353,7 +512,7 @@
 </footer>
 
         <script>
-            let base_url = '..',
+            let base_url = '../..',
                 project  = "packages",
                 siteName = 'dot-controller';
 
