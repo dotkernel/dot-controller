@@ -291,9 +291,8 @@
                     
                     
 
-    <div class="alert alert-danger" role="alert">
-        <h4>Caution</h4>
-        <p>
+    <div class="alert alert-danger alert-caution" role="alert">
+        <p class="mb-0">
             The documentation you are viewing is for an older version of this component.<br>
             <a href="../..">Switch to the latest (v4) version.</a>
         </p>
@@ -306,19 +305,17 @@
     
 
     <h1 id="events">Events</h1>
-<p>DotKernel's controller package supports events and those events can be of 2 types: global events (middleware-like) or manually dispatch  events.</p>
+<p>Dotkernel's controller package supports events and those events can be of 2 types: global events (middleware-like) or manually dispatch  events.</p>
 <h2 id="getting-started">Getting started</h2>
 <ul>
-<li>Every event listener that is triggered from a controller
-needs to implement <code>Dot\Controller\Event\ControllerEventListenerInterface</code> which actually extends <code>Laminas\EventManager\ListenerAggregateInterface</code>.</li>
+<li>Every event listener that is triggered from a controller needs to implement <code>Dot\Controller\Event\ControllerEventListenerInterface</code> which actually extends <code>Laminas\EventManager\ListenerAggregateInterface</code>.</li>
 <li>You can add the trait <code>Dot\Controller\Event\ControllerEventListenerTrait</code> to override the method of the interface.</li>
-<li>Every event listener needs to be registered under the <code>['dot_controller']['event_listenenrs]</code> key in the ConfigProvider, and every key must be the class that you want to attach the events</li>
+<li>Every event listener needs to be registered under the <code>['dot_controller']['event_listenenrs]</code> key in the ConfigProvider, and every key must be the class that you want to attach the events.</li>
 </ul>
 <h2 id="usage">Usage</h2>
-<p>The events in a controller can be done in 2 different ways, a global way where an event is attached automatically to all the controllers action and works in the same way the middlewares works
-or a manually dispatchable way, where you can define to which controller the events is attached, and you can trigger the event where you want.</p>
-<p>For our example we have a UserController with some methods in it</p>
-<pre class="highlight"><code class="language-php">use DotKernel\DotController\AbstractActionController;
+<p>The events in a controller can be done in 2 different ways, a global way where an event is attached automatically to all the controllers action and works in the same way the middlewares works or a manually dispatchable way, where you can define to which controller the events is attached, and you can trigger the event where you want.
+For our example we have a UserController with some methods in it:</p>
+<pre class="highlight"><code class="language-php">use Dotkernel\DotController\AbstractActionController;
 
 class UserController extends AbstractActionController
 {
@@ -339,7 +336,7 @@ class UserController extends AbstractActionController
     }
 }</code></pre>
 <h3 id="example-1-global-way">Example 1 - Global way</h3>
-<p>First we will create the event listener</p>
+<p>First we will create the event listener:</p>
 <pre class="highlight"><code class="language-php">use Dot\Controller\Event\ControllerEvent;
 use Dot\Controller\Event\ControllerEventListenerInterface;
 use Dot\Controller\Event\ControllerEventListenerTrait;
@@ -361,7 +358,7 @@ class UserUpdatedListener implements ControllerEventListenerInterface
     }
 
 }</code></pre>
-<p>We register the event listener in the configuration key</p>
+<p>We register the event listener in the configuration key:</p>
 <pre class="highlight"><code class="language-php">'dot_controller' =&gt; [
     'event_listeners' =&gt; [
         AccountController::class =&gt; [
@@ -369,10 +366,9 @@ class UserUpdatedListener implements ControllerEventListenerInterface
         ]
     ]
 ]</code></pre>
-<p>As you can assume, <code>onBeforeDispatch</code> is triggered right before the controller is dispatched, and <code>onAfterDispatch</code> right
-after the controller is dispatched.</p>
-<p>With this it doesn't matter what action is accessed, the event it will run before and after the action.</p>
-<p>In addition, you can make use of the <code>event</code> variable to access information about the event.</p>
+<p>As you can assume, <code>onBeforeDispatch</code> is triggered right before the controller is dispatched, and <code>onAfterDispatch</code> right after the controller is dispatched.
+With this it doesn't matter what action is accessed, the event it will run before and after the action.
+In addition, you can make use of the <code>event</code> variable to access information about the event.</p>
 <p>For example:</p>
 <pre class="highlight"><code class="language-php">// UserUpdatedListener
 public function onAfterDispatch(ControllerEvent $e): void
@@ -384,9 +380,8 @@ public function onAfterDispatch(ControllerEvent $e): void
 
         }
     }</code></pre>
-<p>So every time the <code>updateAction</code> is accessed and the method is post,
-right after the action is dispatched, we can log that the user was updated.</p>
-<p>We can use the <code>onBeforeDispatch</code> in the same way, to log right before the user is updated.</p>
+<p>So every time the <code>updateAction</code> is accessed and the method is post, right after the action is dispatched, we can log that the user was updated.
+We can use the <code>onBeforeDispatch</code> in the same way, to log right before the user is updated.</p>
 <h3 id="example-2-manually-triggered-way">Example 2 - Manually triggered way</h3>
 <pre class="highlight"><code class="language-php">use Dot\Controller\Event\ControllerEvent;
 use Dot\Controller\Event\ControllerEventListenerInterface;
@@ -413,11 +408,9 @@ class UserUpdatedListener implements ControllerEventListenerInterface
     }
 
 }</code></pre>
-<p>The <code>attach</code> method is from the <code>ListenerAggregateInterface</code> which <code>ControllerEventListenerTrait</code>
-already is overriding it so can be used in a global way with <code>onBeforeDispatch</code> and <code>onAfterDispatch</code>
-methods, but we can make our custom event and bind it to our method.</p>
-<p>In this case we create attach an event called <code>user.profile.update</code> and bind it to the <code>userProfileUpdated</code>  method.</p>
-<p>Next we need to register the event</p>
+<p>The <code>attach</code> method is from the <code>ListenerAggregateInterface</code> which <code>ControllerEventListenerTrait</code> already is overriding it so can be used in a global way with <code>onBeforeDispatch</code> and <code>onAfterDispatch</code> methods, but we can make our custom event and bind it to our method.
+In this case we create attach an event called <code>user.profile.update</code> and bind it to the <code>userProfileUpdated</code> method.</p>
+<p>Next, we need to register the event:</p>
 <pre class="highlight"><code class="language-php">'dot_controller' =&gt; [
     'event_listeners' =&gt; [
         AccountController::class =&gt; [
@@ -445,12 +438,11 @@ public function updateAction()
 
 
     <nav>
-    <ul class="page-nav hidden-print">
+    <ul class="list-unstyled page-nav row w-100 mt-5 mb-3 pt-5 pb-3">
         
-        <li class="page-nav__item">
+        <li class="col text-nowrap text-md-start">
             
                 <a rel="prev" class="page-nav__link page-nav__link--prev" href="../plugins/">
-                    <small class="page-nav__label">Previous</small>
                     <i class="bi bi-chevron-left"></i>
                     Plugins
                 </a>
@@ -458,7 +450,7 @@ public function updateAction()
         </li>
 
         
-        <li class="page-nav__item">
+        <li class="col text-nowrap text-md-end pe-0">
             
         </li>
     </ul>
@@ -474,15 +466,13 @@ public function updateAction()
         
         <footer class="footer">
     <div class="container">
+        <hr class="mb-5" />
+
         <div class="row">
             <div class="col-md-9">
-                <div class="footer_head">
-                    <p>Dotkernel</p>
-                </div>
-
                 <div class="row">
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel API</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">API</p>
 
                         <a href="https://docs.dotkernel.org/api-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -490,8 +480,8 @@ public function updateAction()
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Admin</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Admin</p>
 
                         <a href="https://docs.dotkernel.org/admin-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -499,8 +489,8 @@ public function updateAction()
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Frontend</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Frontend</p>
 
                         <a href="https://docs.dotkernel.org/frontend-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -508,8 +498,8 @@ public function updateAction()
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Light</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Light</p>
 
                         <a href="https://docs.dotkernel.org/light-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -517,8 +507,8 @@ public function updateAction()
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Packages</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Dotkernel Packages</p>
 
                         <a href="https://docs.dotkernel.org/packages/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -526,8 +516,8 @@ public function updateAction()
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel environment</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Development environment</p>
 
                         <a href="https://docs.dotkernel.org/development/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -537,34 +527,29 @@ public function updateAction()
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="footer_head">
-                    <p>Support</p>
-                </div>
-
-                <ul class="support__list">
-                    <li class="support__list-item">
+            <div class="col-md-3 pt-3 mt-1">
+                <ul class="support__list row">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://github.com/dotkernel" class="support__link" title="GitHub" target="_blank">
                             <i class="bi bi-github"></i> GitHub
                         </a>
                     </li>
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://dotkernel.slack.com" class="support__link" title="Chat" target="_blank">
                             <i class="bi bi-slack"></i> Slack
                         </a>
                     </li>
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://twitter.com/dotkernel" class="support__link" title="X (Twitter)" target="_blank">
                             <i class="bi bi-twitter-x"></i> Twitter
                         </a>
                     </li>
-
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://www.dotkernel.com/blog/" class="support__link" title="Blog" target="_blank">
                             <i class="bi bi-file-post"></i> Blog
                         </a>
                     </li>
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://www.dotkernel.com/feed/" class="support__link" title="Blog feed" target="_blank">
                             <i class="bi bi-rss-fill"></i> Feed
                         </a>
@@ -573,8 +558,10 @@ public function updateAction()
             </div>
         </div>
 
+        <hr class="mt-5" />
+
         <div class="footer_copy">
-            &#169; 2024 Dotkernel
+            &#169; Copyright Dotkernel 2024. All rights reserved.
         </div>
     </div>
 </footer>

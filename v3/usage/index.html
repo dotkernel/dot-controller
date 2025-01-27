@@ -295,9 +295,8 @@
                     
                     
 
-    <div class="alert alert-danger" role="alert">
-        <h4>Caution</h4>
-        <p>
+    <div class="alert alert-danger alert-caution" role="alert">
+        <p class="mb-0">
             The documentation you are viewing is for an older version of this component.<br>
             <a href="../..">Switch to the latest (v4) version.</a>
         </p>
@@ -316,10 +315,11 @@
 <li>action parameter value is converted to a method name inside the controller. Underscore, dot and line characters are removed and the action name is converted to camel-case suffixed by the string <code>Action</code>. For example a route and action pair like <code>/user/forgot-password</code> will be converted to method <code>forgotPasswordAction</code>.</li>
 <li>the default action value, if not present in the URI is <code>index</code>, so you should always define an <code>indexAction</code> within your controllers for displaying a default page or redirecting.</li>
 </ul>
-<p>In order to create your action based controllers, you must extend the abstract class <code>DotKernel\DotController\AbstractActionController</code></p>
+<p>In order to create your action based controllers, you must extend the abstract class <code>Dot\Controller\AbstractActionController</code>.</p>
 <h2 id="example">Example</h2>
-<p>Creating a UserController with default action and a register action. Will handle routes <code>/user</code> and <code>/user/register</code></p>
-<pre class="highlight"><code class="language-php">use DotKernel\DotController\AbstractActionController;
+<p>Creating a UserController with default action and a register action.
+It will handle routes <code>/user</code> and <code>/user/register</code>:</p>
+<pre class="highlight"><code class="language-php">use Dot\Controller\AbstractActionController;
 
 class UserController extends AbstractActionController
 {
@@ -333,8 +333,8 @@ class UserController extends AbstractActionController
         //...
     }
 }</code></pre>
-<p>Then register this controller as a routed middleware in file <code>RoutesDelegator.php</code> just like a regular middleware.</p>
-<pre class="highlight"><code class="language-php">//Example from a DotKernel RoutesDelegator
+<p>Then register this controller as a routed middleware in file <code>RoutesDelegator.php</code> just like a regular middleware:</p>
+<pre class="highlight"><code class="language-php">//Example from a Dotkernel RoutesDelegator
 $app-&gt;route(
     '/user[/{action}]',
     UserController::class,
@@ -342,13 +342,15 @@ $app-&gt;route(
     'user'
 );</code></pre>
 <h3 id="multiple-controllers-for-the-same-route">Multiple controllers for the same route</h3>
-<p>Use case: You have defined a controller inside some package, with default actions. You want to add actions that fall into the same controller name(or route name more exactly). You want to do this without extending the controller provided by the package. In this case you can do the following</p>
+<p><strong>Use case:</strong>
+You have defined a controller inside some package, with default actions. You want to add actions that fall into the same controller name(or route name more exactly). You want to do this without extending the controller provided by the package. In this case you can do the following</p>
 <ul>
 <li>create your own controller, independent of the package's controller which adds more actions</li>
 <li>Mezzio lets you define an array of middleware for a route, so you can register this controller before the package's controller</li>
 </ul>
-<p>Now when a request for this route comes in, your controller will run first. DotKernel controllers are designed to ignore requests that cannot be matched to one of its methods, so if no action matches, it will call the next middleware, in our case, the second controller.
-If this is the last controller, and action does not match here, it will go to the default 404 Not found page(handled by NotFoundDelegate)</p>
+<p>Now when a request for this route comes in, your controller will run first.
+Dotkernel controllers are designed to ignore requests that cannot be matched to one of its methods, so if no action matches, it will call the next middleware, in our case, the second controller.
+If this is the last controller, and action does not match here, it will go to the default 404 Not found page(handled by NotFoundDelegate).</p>
 <h2 id="plugins">Plugins</h2>
 <ul>
 <li><a href="../plugins/">Plugins</a></li>
@@ -362,12 +364,11 @@ If this is the last controller, and action does not match here, it will go to th
 
 
     <nav>
-    <ul class="page-nav hidden-print">
+    <ul class="list-unstyled page-nav row w-100 mt-5 mb-3 pt-5 pb-3">
         
-        <li class="page-nav__item">
+        <li class="col text-nowrap text-md-start">
             
                 <a rel="prev" class="page-nav__link page-nav__link--prev" href="../configuration/">
-                    <small class="page-nav__label">Previous</small>
                     <i class="bi bi-chevron-left"></i>
                     Configuration
                 </a>
@@ -375,10 +376,9 @@ If this is the last controller, and action does not match here, it will go to th
         </li>
 
         
-        <li class="page-nav__item">
+        <li class="col text-nowrap text-md-end pe-0">
             
                 <a rel="next" class="page-nav__link page-nav__link--next" href="../plugins/">
-                    <small class="page-nav__label">Next</small>
                     Plugins
                     <i class="bi bi-chevron-right"></i>
                 </a>
@@ -397,15 +397,13 @@ If this is the last controller, and action does not match here, it will go to th
         
         <footer class="footer">
     <div class="container">
+        <hr class="mb-5" />
+
         <div class="row">
             <div class="col-md-9">
-                <div class="footer_head">
-                    <p>Dotkernel</p>
-                </div>
-
                 <div class="row">
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel API</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">API</p>
 
                         <a href="https://docs.dotkernel.org/api-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -413,8 +411,8 @@ If this is the last controller, and action does not match here, it will go to th
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Admin</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Admin</p>
 
                         <a href="https://docs.dotkernel.org/admin-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -422,8 +420,8 @@ If this is the last controller, and action does not match here, it will go to th
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Frontend</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Frontend</p>
 
                         <a href="https://docs.dotkernel.org/frontend-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -431,8 +429,8 @@ If this is the last controller, and action does not match here, it will go to th
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Light</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Light</p>
 
                         <a href="https://docs.dotkernel.org/light-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -440,8 +438,8 @@ If this is the last controller, and action does not match here, it will go to th
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Packages</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Dotkernel Packages</p>
 
                         <a href="https://docs.dotkernel.org/packages/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -449,8 +447,8 @@ If this is the last controller, and action does not match here, it will go to th
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel environment</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Development environment</p>
 
                         <a href="https://docs.dotkernel.org/development/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -460,34 +458,29 @@ If this is the last controller, and action does not match here, it will go to th
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="footer_head">
-                    <p>Support</p>
-                </div>
-
-                <ul class="support__list">
-                    <li class="support__list-item">
+            <div class="col-md-3 pt-3 mt-1">
+                <ul class="support__list row">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://github.com/dotkernel" class="support__link" title="GitHub" target="_blank">
                             <i class="bi bi-github"></i> GitHub
                         </a>
                     </li>
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://dotkernel.slack.com" class="support__link" title="Chat" target="_blank">
                             <i class="bi bi-slack"></i> Slack
                         </a>
                     </li>
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://twitter.com/dotkernel" class="support__link" title="X (Twitter)" target="_blank">
                             <i class="bi bi-twitter-x"></i> Twitter
                         </a>
                     </li>
-
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://www.dotkernel.com/blog/" class="support__link" title="Blog" target="_blank">
                             <i class="bi bi-file-post"></i> Blog
                         </a>
                     </li>
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://www.dotkernel.com/feed/" class="support__link" title="Blog feed" target="_blank">
                             <i class="bi bi-rss-fill"></i> Feed
                         </a>
@@ -496,8 +489,10 @@ If this is the last controller, and action does not match here, it will go to th
             </div>
         </div>
 
+        <hr class="mt-5" />
+
         <div class="footer_copy">
-            &#169; 2024 Dotkernel
+            &#169; Copyright Dotkernel 2024. All rights reserved.
         </div>
     </div>
 </footer>

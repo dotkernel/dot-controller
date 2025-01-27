@@ -291,9 +291,8 @@
                     
                     
 
-    <div class="alert alert-danger" role="alert">
-        <h4>Caution</h4>
-        <p>
+    <div class="alert alert-danger alert-caution" role="alert">
+        <p class="mb-0">
             The documentation you are viewing is for an older version of this component.<br>
             <a href="../..">Switch to the latest (v4) version.</a>
         </p>
@@ -306,20 +305,17 @@
     
 
     <h1 id="plugins">Plugins</h1>
-<p>DotKernel's controller support plugins, much like controllers in a Laminas Applications.
+<p>Dotkernel's controller support plugins, much like controllers in Laminas applications.
 The package comes packed with a few built in plugins, but you can extend controller functionality with your own plugins.</p>
 <h2 id="usage">Usage</h2>
 <p>Any controller plugins must implement <code>Dot\Controller\Plugin\PluginInterface</code>.
-You need to create a factory in addition to the plugin and register it
-under the <code>['dot_controller']['plugin_manager']['factories']</code> with the plugin name.</p>
-<p>Once registered, a plugin can be directly accessed in any controller,
-by calling a method with the plugin's name (the service name or the key at which the plugin is registered inside the manager)</p>
-<p>Controller plugins offer the advantage of globally accessible functionality
-in any controller without to manually inject dependencies.
+You need to create a factory in addition to the plugin and register it under the <code>['dot_controller']['plugin_manager']['factories']</code> with the plugin name.</p>
+<p>Once registered, a plugin can be directly accessed in any controller, by calling a method with the plugin's name (the service name or the key at which the plugin is registered inside the manager).</p>
+<p>Controller plugins offer the advantage of globally accessible functionality in any controller without to manually inject dependencies.
 Plugins should be used for functions that are common to any controller.
 Do not clutter controller's code with unnecessary plugins.</p>
 <h3 id="example">Example</h3>
-<p>First we create our desired plugin, for our example a string helper</p>
+<p>First we create our desired plugin, for our example a string helper:</p>
 <pre class="highlight"><code class="language-php">class StringPlugin implements PluginInterface
 {
 
@@ -329,7 +325,7 @@ Do not clutter controller's code with unnecessary plugins.</p>
         return strtoupper($string);
     }
 }</code></pre>
-<p>We create a factory for the plugin</p>
+<p>We create a factory for the plugin:</p>
 <pre class="highlight"><code class="language-php">use Psr\Container\ContainerInterface;
 
 class StringPluginFactory
@@ -349,24 +345,23 @@ class StringPluginFactory
         ]
     ]
 ]</code></pre>
-<p>You don't need to register the plugin factory to a regular dependencies in a configuration
-because <code>AbstractPluginManager</code> actually extends <code>ServiceManager</code></p>
-<p>Access it in a controller.</p>
+<p>You don't need to register the plugin factory to a regular dependencies in a configuration because <code>AbstractPluginManager</code> actually extends <code>ServiceManager</code>.
+Access it in a controller:</p>
 <pre class="highlight"><code class="language-php">//inside a controller 
 $this-&gt;string(); // will return the StringPlugin class, so you can call any public method from it
 $this-&gt;string()-&gt;toUpper("test") // will return TEST</code></pre>
 <h2 id="build-in-plugins">Build-in plugins</h2>
-<p>The package comes in with 2 default plugins <code>template</code> and <code>url</code>. You can use
-them in the same way as our example above.</p>
+<p>The package comes in with 2 default plugins <code>template</code> and <code>url</code>.
+You can use them in the same way as our example above.</p>
 <ul>
-<li><code>url</code> - the plugin is an instance of <code>Mezzio\Helper\UrlHelper</code></li>
+<li><code>url</code> - the plugin is an instance of <code>Mezzio\Helper\UrlHelper</code>:</li>
 </ul>
 <pre class="highlight"><code class="language-php">    //in a controller action 
     /** @var UrlHelper $url */
     $url = $this-&gt;url();
     echo $url-&gt;generate('account', ['action' =&gt; 'foo', 'hash' =&gt; 'bar'])</code></pre>
 <ul>
-<li><code>template</code> - the plugin is an instance of <code>Mezzio\Template\TemplateRendererInterface</code></li>
+<li><code>template</code> - the plugin is an instance of <code>Mezzio\Template\TemplateRendererInterface</code>:</li>
 </ul>
 <pre class="highlight"><code class="language-php">    // in a controller action
     return new HtmlResponse(
@@ -379,12 +374,11 @@ them in the same way as our example above.</p>
 
 
     <nav>
-    <ul class="page-nav hidden-print">
+    <ul class="list-unstyled page-nav row w-100 mt-5 mb-3 pt-5 pb-3">
         
-        <li class="page-nav__item">
+        <li class="col text-nowrap text-md-start">
             
                 <a rel="prev" class="page-nav__link page-nav__link--prev" href="../usage/">
-                    <small class="page-nav__label">Previous</small>
                     <i class="bi bi-chevron-left"></i>
                     Usage
                 </a>
@@ -392,10 +386,9 @@ them in the same way as our example above.</p>
         </li>
 
         
-        <li class="page-nav__item">
+        <li class="col text-nowrap text-md-end pe-0">
             
                 <a rel="next" class="page-nav__link page-nav__link--next" href="../events/">
-                    <small class="page-nav__label">Next</small>
                     Events
                     <i class="bi bi-chevron-right"></i>
                 </a>
@@ -414,15 +407,13 @@ them in the same way as our example above.</p>
         
         <footer class="footer">
     <div class="container">
+        <hr class="mb-5" />
+
         <div class="row">
             <div class="col-md-9">
-                <div class="footer_head">
-                    <p>Dotkernel</p>
-                </div>
-
                 <div class="row">
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel API</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">API</p>
 
                         <a href="https://docs.dotkernel.org/api-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -430,8 +421,8 @@ them in the same way as our example above.</p>
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Admin</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Admin</p>
 
                         <a href="https://docs.dotkernel.org/admin-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -439,8 +430,8 @@ them in the same way as our example above.</p>
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Frontend</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Frontend</p>
 
                         <a href="https://docs.dotkernel.org/frontend-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -448,8 +439,8 @@ them in the same way as our example above.</p>
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Light</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Light</p>
 
                         <a href="https://docs.dotkernel.org/light-documentation/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -457,8 +448,8 @@ them in the same way as our example above.</p>
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel Packages</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Dotkernel Packages</p>
 
                         <a href="https://docs.dotkernel.org/packages/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -466,8 +457,8 @@ them in the same way as our example above.</p>
                         </a>
                     </div>
 
-                    <div class="col-md-6 dk_widget">
-                        <p>Dotkernel environment</p>
+                    <div class="col-lg-4 col-md-6 dk_widget">
+                        <p class="ms-0">Development environment</p>
 
                         <a href="https://docs.dotkernel.org/development/">
                             <i class="bi bi-arrow-return-right"></i>
@@ -477,34 +468,29 @@ them in the same way as our example above.</p>
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="footer_head">
-                    <p>Support</p>
-                </div>
-
-                <ul class="support__list">
-                    <li class="support__list-item">
+            <div class="col-md-3 pt-3 mt-1">
+                <ul class="support__list row">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://github.com/dotkernel" class="support__link" title="GitHub" target="_blank">
                             <i class="bi bi-github"></i> GitHub
                         </a>
                     </li>
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://dotkernel.slack.com" class="support__link" title="Chat" target="_blank">
                             <i class="bi bi-slack"></i> Slack
                         </a>
                     </li>
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://twitter.com/dotkernel" class="support__link" title="X (Twitter)" target="_blank">
                             <i class="bi bi-twitter-x"></i> Twitter
                         </a>
                     </li>
-
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://www.dotkernel.com/blog/" class="support__link" title="Blog" target="_blank">
                             <i class="bi bi-file-post"></i> Blog
                         </a>
                     </li>
-                    <li class="support__list-item">
+                    <li class="support__list-item col-lg-6 mb-md-3">
                         <a href="https://www.dotkernel.com/feed/" class="support__link" title="Blog feed" target="_blank">
                             <i class="bi bi-rss-fill"></i> Feed
                         </a>
@@ -513,8 +499,10 @@ them in the same way as our example above.</p>
             </div>
         </div>
 
+        <hr class="mt-5" />
+
         <div class="footer_copy">
-            &#169; 2024 Dotkernel
+            &#169; Copyright Dotkernel 2024. All rights reserved.
         </div>
     </div>
 </footer>
