@@ -6,14 +6,15 @@ Middleware controllers act as a handler for multiple routes. Some conventions we
 - action parameter value is converted to a method name inside the controller. Underscore, dot and line characters are removed and the action name is converted to camel-case suffixed by the string `Action`. For example a route and action pair like `/user/forgot-password` will be converted to method `forgotPasswordAction`.
 - the default action value, if not present in the URI is `index`, so you should always define an `indexAction` within your controllers for displaying a default page or redirecting.
 
-In order to create your action based controllers, you must extend the abstract class `DotKernel\DotController\AbstractActionController`
+In order to create your action based controllers, you must extend the abstract class `Dot\Controller\AbstractActionController`.
 
 ## Example
 
-Creating a UserController with default action and a register action. Will handle routes `/user` and `/user/register`
+Creating a UserController with default action and a register action.
+It will handle routes `/user` and `/user/register`:
 
 ```php
-use DotKernel\DotController\AbstractActionController;
+use Dot\Controller\AbstractActionController;
 
 class UserController extends AbstractActionController
 {
@@ -29,10 +30,10 @@ class UserController extends AbstractActionController
 }
 ```
 
-Then register this controller as a routed middleware in file `RoutesDelegator.php` just like a regular middleware.
+Then register this controller as a routed middleware in file `RoutesDelegator.php` just like a regular middleware:
 
 ```php
-//Example from a DotKernel RoutesDelegator
+//Example from a Dotkernel RoutesDelegator
 $app->route(
     '/user[/{action}]',
     UserController::class,
@@ -43,13 +44,15 @@ $app->route(
 
 ### Multiple controllers for the same route
 
-Use case: You have defined a controller inside some package, with default actions. You want to add actions that fall into the same controller name(or route name more exactly). You want to do this without extending the controller provided by the package. In this case you can do the following
+**Use case:**
+You have defined a controller inside some package, with default actions. You want to add actions that fall into the same controller name(or route name more exactly). You want to do this without extending the controller provided by the package. In this case you can do the following
 
 - create your own controller, independent of the package's controller which adds more actions
 - Mezzio lets you define an array of middleware for a route, so you can register this controller before the package's controller
 
-Now when a request for this route comes in, your controller will run first. DotKernel controllers are designed to ignore requests that cannot be matched to one of its methods, so if no action matches, it will call the next middleware, in our case, the second controller.
-If this is the last controller, and action does not match here, it will go to the default 404 Not found page(handled by NotFoundDelegate)
+Now when a request for this route comes in, your controller will run first.
+Dotkernel controllers are designed to ignore requests that cannot be matched to one of its methods, so if no action matches, it will call the next middleware, in our case, the second controller.
+If this is the last controller, and action does not match here, it will go to the default 404 Not found page(handled by NotFoundDelegate).
 
 ## Plugins
 

@@ -1,7 +1,7 @@
 {
     "name": "dotkernel/dot-controller",
     "type": "library",
-    "description": "DotKernel controller like middleware component with plugin support",
+    "description": "Dotkernel controller like middleware component with plugin support",
     "license": "MIT",
     "homepage": "https://github.com/dotkernel/dot-controller",
     "keywords": [
@@ -13,7 +13,7 @@
     ],
     "authors": [
         {
-            "name": "DotKernel Team",
+            "name": "Dotkernel Team",
             "email": "team@dotkernel.com"
         }
     ],
@@ -29,7 +29,7 @@
         "laminas/laminas-coding-standard": "^3.0",
         "laminas/laminas-diactoros": "^3.0",
         "phpunit/phpunit": "^10.2",
-        "vimeo/psalm": "^5.13"
+        "vimeo/psalm": "^6.0"
     },
     "autoload": {
         "psr-4": {
