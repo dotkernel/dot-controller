@@ -73,7 +73,5 @@ class ControllerEventListenersInitializerTest extends TestCase
             ->with($this->isInstanceOf(ControllerEventListenerInterface::class), 1);
 
         $this->subject->attachControllerListeners($this->container, $this->controller);
-
-        $this->assertTrue(true);
     }
 }

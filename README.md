@@ -14,7 +14,7 @@ It is more lightweight though, but supports controller plugins and event listene
 
 [![Build Static](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml/badge.svg?branch=4.0)](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml)
 [![codecov](https://codecov.io/gh/dotkernel/dot-controller/graph/badge.svg?token=VUBG5LM4CK)](https://codecov.io/gh/dotkernel/dot-controller)
-
+[![PHPStan](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml/badge.svg?branch=4.0)](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml)
 ## Installation
 
 Install `dot-controller` by executing the following Composer command:
