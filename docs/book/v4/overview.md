@@ -12,8 +12,8 @@ It is more lightweight though, but supports controller plugins and event listene
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/network)
 [![GitHub stars](https://img.shields.io/github/stars/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/stargazers)
-[![GitHub license](https://img.shields.io/github/license/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/blob/3.0/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/blob/4.0/LICENSE)
 
 [![Build Static](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml/badge.svg?branch=4.0)](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml)
-[![codecov](https://codecov.io/gh/dotkernel/dot-controller/graph/badge.svg?token=HZKFRQWDSV)](https://codecov.io/gh/dotkernel/dot-controller)
+[![codecov](https://codecov.io/gh/dotkernel/dot-controller/graph/badge.svg?token=VUBG5LM4CK)](https://codecov.io/gh/dotkernel/dot-controller)
 [![PHPStan](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml/badge.svg?branch=4.0)](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml)
