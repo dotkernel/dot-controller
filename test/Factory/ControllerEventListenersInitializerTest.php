@@ -72,6 +72,7 @@ class ControllerEventListenersInitializerTest extends TestCase
         $this->eventManager->expects($this->any())->method('attach')
             ->with($this->isInstanceOf(ControllerEventListenerInterface::class), 1);
 
+        $this->expectNotToPerformAssertions();
         $this->subject->attachControllerListeners($this->container, $this->controller);
     }
 }
