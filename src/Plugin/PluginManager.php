@@ -12,6 +12,6 @@ use Laminas\ServiceManager\AbstractPluginManager;
  */
 class PluginManager extends AbstractPluginManager
 {
-    /** @var string $instanceOf */
+    /** @inheritDoc */
     protected $instanceOf = PluginInterface::class;
 }

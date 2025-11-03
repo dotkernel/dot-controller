@@ -1,0 +1,13 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+parameters:
+    level: 5
+    paths:
+        - src
+        - test
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+            - message: '#Call to an undefined method .*::somePlugin\(\)\.#'
+              path: test/AbstractControllerTest.php
+            - message: '#Call to an undefined method .*::callablePlugin\(\)\.#'
+              path: test/AbstractControllerTest.php
