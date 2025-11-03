@@ -28,7 +28,7 @@ class AbstractActionControllerTest extends TestCase
         };
 
         $response = $subject->process($request, $handler);
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertContainsOnlyInstancesOf(ResponseInterface::class, [$response]);
     }
 
     /**
@@ -49,6 +49,6 @@ class AbstractActionControllerTest extends TestCase
         };
 
         $response = $subject->process($request, $handler);
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertContainsOnlyInstancesOf(ResponseInterface::class, [$response]);
     }
 }

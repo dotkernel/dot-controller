@@ -60,7 +60,7 @@ class PluginManagerFactoryTest extends TestCase
 
         $pluginManager = $this->subject->__invoke($this->container);
 
-        $this->assertInstanceOf(PluginManager::class, $pluginManager);
+        $this->assertContainsOnlyInstancesOf(PluginManager::class, [$pluginManager]);
         $this->assertTrue($pluginManager->has('url'));
         $this->assertFalse($pluginManager->has('template'));
         $this->assertInstanceOf(UrlHelperPlugin::class, $pluginManager->get('url'));
@@ -91,7 +91,7 @@ class PluginManagerFactoryTest extends TestCase
 
         $pluginManager = $this->subject->__invoke($this->container);
 
-        $this->assertInstanceOf(PluginManager::class, $pluginManager);
+        $this->assertContainsOnlyInstancesOf(PluginManager::class, [$pluginManager]);
         $this->assertTrue($pluginManager->has('template'));
         $this->assertFalse($pluginManager->has('url'));
         $this->assertInstanceOf(TemplatePlugin::class, $pluginManager->get('template'));
