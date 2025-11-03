@@ -27,9 +27,9 @@
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/bootstrap.css">
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/bootstrap-icons.min.css">
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/docs.css">
-        <script src="https://docs.dotkernel.org//js/bootstrap.js" defer></script>
-        <script src="https://docs.dotkernel.org//js/docs.js" defer></script>
-        <script src="https://docs.dotkernel.org//js/scripts.js" defer></script>
+        <script src="https://docs.dotkernel.org/js/bootstrap.js" defer></script>
+        <script src="https://docs.dotkernel.org/js/docs.js" defer></script>
+        <script src="https://docs.dotkernel.org/js/scripts.js" defer></script>
     </head>
     <body data-bs-spy="scroll" data-bs-target=".toc" data-bs-offset="100">
 
@@ -51,60 +51,72 @@
                         
                         <li class="dropdown-item ">
                             <a href="https://docs.dotkernel.org/api-documentation/" class="nav-link d-flex gap-4 align-items-center">
-                                <img alt="Dotkernel Logo" class="d-inline-block align-text-top" height="50" src="https://docs.dotkernel.org/img/dk_logomark.svg" width="45" />
-                                <div>
+                                <i class="bi bi-arrow-return-right text-primary"></i>
+                                <div class="py-1">
                                     <span class="fw-bold d-block">API</span>
-                                    <span>Dotkernel API</span>
                                 </div>
                             </a>
                         </li>
                         
                         <li class="dropdown-item ">
                             <a href="https://docs.dotkernel.org/admin-documentation/" class="nav-link d-flex gap-4 align-items-center">
-                                <img alt="Dotkernel Logo" class="d-inline-block align-text-top" height="50" src="https://docs.dotkernel.org/img/dk_logomark.svg" width="45" />
-                                <div>
+                                <i class="bi bi-arrow-return-right text-primary"></i>
+                                <div class="py-1">
                                     <span class="fw-bold d-block">Admin</span>
-                                    <span>Dotkernel Admin</span>
                                 </div>
                             </a>
                         </li>
                         
                         <li class="dropdown-item ">
                             <a href="https://docs.dotkernel.org/frontend-documentation/" class="nav-link d-flex gap-4 align-items-center">
-                                <img alt="Dotkernel Logo" class="d-inline-block align-text-top" height="50" src="https://docs.dotkernel.org/img/dk_logomark.svg" width="45" />
-                                <div>
+                                <i class="bi bi-arrow-return-right text-primary"></i>
+                                <div class="py-1">
                                     <span class="fw-bold d-block">Frontend</span>
-                                    <span>Dotkernel Frontend</span>
                                 </div>
                             </a>
                         </li>
                         
                         <li class="dropdown-item ">
                             <a href="https://docs.dotkernel.org/light-documentation/" class="nav-link d-flex gap-4 align-items-center">
-                                <img alt="Dotkernel Logo" class="d-inline-block align-text-top" height="50" src="https://docs.dotkernel.org/img/dk_logomark.svg" width="45" />
-                                <div>
+                                <i class="bi bi-arrow-return-right text-primary"></i>
+                                <div class="py-1">
                                     <span class="fw-bold d-block">Light</span>
-                                    <span>Dotkernel Light</span>
                                 </div>
                             </a>
                         </li>
                         
-                        <li class="dropdown-item bg-light">
+                        <li class="dropdown-item ">
+                            <a href="https://docs.dotkernel.org/queue-documentation/" class="nav-link d-flex gap-4 align-items-center">
+                                <i class="bi bi-arrow-return-right text-primary"></i>
+                                <div class="py-1">
+                                    <span class="fw-bold d-block">Queue</span>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <li class="dropdown-item bg-dark-subtle">
                             <a href="https://docs.dotkernel.org/packages/" class="nav-link d-flex gap-4 align-items-center">
-                                <img alt="Dotkernel Logo" class="d-inline-block align-text-top" height="50" src="https://docs.dotkernel.org/img/dk_logomark.svg" width="45" />
-                                <div>
+                                <i class="bi bi-arrow-return-right text-primary"></i>
+                                <div class="py-1">
                                     <span class="fw-bold d-block">Packages</span>
-                                    <span>Dotkernel packages</span>
                                 </div>
                             </a>
                         </li>
                         
                         <li class="dropdown-item ">
                             <a href="https://docs.dotkernel.org/development/" class="nav-link d-flex gap-4 align-items-center">
-                                <img alt="Dotkernel Logo" class="d-inline-block align-text-top" height="50" src="https://docs.dotkernel.org/img/dk_logomark.svg" width="45" />
-                                <div>
+                                <i class="bi bi-arrow-return-right text-primary"></i>
+                                <div class="py-1">
                                     <span class="fw-bold d-block">Development</span>
-                                    <span>WSL2 Development Environment</span>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <li class="dropdown-item ">
+                            <a href="https://docs.dotkernel.org/headless-documentation/" class="nav-link d-flex gap-4 align-items-center">
+                                <i class="bi bi-arrow-return-right text-primary"></i>
+                                <div class="py-1">
+                                    <span class="fw-bold d-block">Headless Platform</span>
                                 </div>
                             </a>
                         </li>
@@ -132,34 +144,36 @@
                 </li>
                 <li class="nav-item">
                     
-<div class="version-selector">
-    <div class="btn-group">
-        <button type="button" class="btn dropdown-toggle bg-light" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
-            
-                v4
-            
-        </button>
-        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
-            
+    
+    <div class="version-selector">
+        <div class="btn-group">
+            <button type="button" class="btn dropdown-toggle bg-light" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
                 
-                    <a href="../overview/" class="dropdown-item active">
-                        
-                            v4 (latest)
-                        
-                    </a>
+                    v4
                 
-            
+            </button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
                 
-                    <a href="../../v3/overview/" class="dropdown-item">
-                        
-                            v3
-                        
-                    </a>
                 
-            
+                <a href="../overview/" class="dropdown-item active">
+                    
+                        v4 (latest)
+                    
+                </a>
+                
+                
+                
+                <a href="../../v3/overview/" class="dropdown-item">
+                    
+                        v3
+                    
+                </a>
+                
+                
+            </div>
         </div>
     </div>
-</div>
+    
 
                 </li>
             </ul>
@@ -302,15 +316,19 @@
     
 
     <h1 id="usage">Usage</h1>
-<p>Middleware controllers act as a handler for multiple routes. Some conventions were made:</p>
+<p>Middleware controllers act as a handler for multiple routes.
+Some conventions were made:</p>
 <ul>
-<li>register controllers in the routes array just like any mezzio middleware. The requirement is that you should define an <code>action</code> route parameter(possibly optional) anywhere inside the route(e.g <code>/user[/{action}]</code>)</li>
-<li>action parameter value is converted to a method name inside the controller. Underscore, dot and line characters are removed and the action name is converted to camel-case suffixed by the string <code>Action</code>. For example a route and action pair like <code>/user/forgot-password</code> will be converted to method <code>forgotPasswordAction</code>.</li>
+<li>register controllers in the <code>routes</code> array just like any mezzio middleware.
+  The requirement is that you should define an <code>action</code> route parameter (possibly optional) anywhere inside the route (e.g <code>/user[/{action}]</code>).</li>
+<li>action parameter value is converted to a method name inside the controller.
+  Underscore, dot and line characters are removed and the action name is converted to a camel-case suffixed by the string <code>Action</code>.
+  For example, a route and action pair like <code>/user/forgot-password</code> will be converted to method <code>forgotPasswordAction</code>.</li>
 <li>the default action value, if not present in the URI is <code>index</code>, so you should always define an <code>indexAction</code> within your controllers for displaying a default page or redirecting.</li>
 </ul>
-<p>In order to create your action based controllers, you must extend the abstract class <code>Dot\Controller\AbstractActionController</code>.</p>
+<p>To create your action-based controllers, you must extend the abstract class <code>Dot\Controller\AbstractActionController</code>.</p>
 <h2 id="example">Example</h2>
-<p>Creating a UserController with default action and a register action.
+<p>Creating a UserController with a default action and a register action.
 It will handle routes <code>/user</code> and <code>/user/register</code>:</p>
 <pre class="highlight"><code class="language-php">use Dot\Controller\AbstractActionController;
 
@@ -326,7 +344,7 @@ class UserController extends AbstractActionController
         //...
     }
 }</code></pre>
-<p>Then register this controller as a routed middleware in file <code>RoutesDelegator.php</code> just like a regular middleware:</p>
+<p>Then register this controller as routed middleware in file <code>RoutesDelegator.php</code> just like regular middleware:</p>
 <pre class="highlight"><code class="language-php">//Example from a Dotkernel RoutesDelegator
 $app-&gt;route(
     '/user[/{action}]',
@@ -336,14 +354,16 @@ $app-&gt;route(
 );</code></pre>
 <h3 id="multiple-controllers-for-the-same-route">Multiple controllers for the same route</h3>
 <p><strong>Use case:</strong>
-You have defined a controller inside some package, with default actions. You want to add actions that fall into the same controller name(or route name more exactly). You want to do this without extending the controller provided by the package. In this case you can do the following</p>
+You have defined a controller inside some package, with default actions. You want to add actions that fall into the same controller name (or route name more exactly).
+You want to do this without extending the controller provided by the package.
+In this case you can do the following:</p>
 <ul>
-<li>create your own controller, independent of the package's controller which adds more actions</li>
+<li>create your own controller, independent of the package's controller, which adds more actions</li>
 <li>Mezzio lets you define an array of middleware for a route, so you can register this controller before the package's controller</li>
 </ul>
 <p>Now when a request for this route comes in, your controller will run first.
 Dotkernel controllers are designed to ignore requests that cannot be matched to one of its methods, so if no action matches, it will call the next middleware, in our case, the second controller.
-If this is the last controller, and action does not match here, it will go to the default 404 Not found page(handled by NotFoundDelegate).</p>
+If this is the last controller, and the action does not match here, it will go to the default 404 Not found page (handled by NotFoundDelegate).</p>
 <h2 id="plugins">Plugins</h2>
 <ul>
 <li><a href="../plugins/">Plugins</a></li>
@@ -478,6 +498,11 @@ If this is the last controller, and action does not match here, it will go to th
                             <i class="bi bi-rss-fill"></i> Feed
                         </a>
                     </li>
+                    <li class="support__list-item col-lg-6 mb-md-3">
+                        <a href="https://github.com/orgs/dotkernel/discussions" class="support__link" title="Blog feed" target="_blank">
+                            <i class="bi bi-chat-left-text"></i> Discussions
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -485,7 +510,7 @@ If this is the last controller, and action does not match here, it will go to th
         <hr class="mt-5" />
 
         <div class="footer_copy">
-            &#169; Copyright Dotkernel 2024. All rights reserved.
+            &#169; Copyright Dotkernel <span id="current-year"></span>. All rights reserved.
         </div>
     </div>
 </footer>
