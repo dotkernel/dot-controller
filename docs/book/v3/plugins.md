@@ -1,22 +1,22 @@
 # Plugins
 
-Dotkernel's controller support plugins, much like controllers in Laminas applications.
-The package comes packed with a few built in plugins, but you can extend controller functionality with your own plugins.
+Dotkernel's controller supports plugins, much like controllers in Laminas applications.
+The package comes packed with a few built-in plugins, but you can extend controller functionality with your own plugins.
 
 ## Usage
 
 Any controller plugins must implement `Dot\Controller\Plugin\PluginInterface`.
 You need to create a factory in addition to the plugin and register it under the `['dot_controller']['plugin_manager']['factories']` with the plugin name.
 
-Once registered, a plugin can be directly accessed in any controller, by calling a method with the plugin's name (the service name or the key at which the plugin is registered inside the manager).
+Once registered, a plugin can be directly accessed in any controller by calling a method with the plugin's name (the service name or the key at which the plugin is registered inside the manager).
 
-Controller plugins offer the advantage of globally accessible functionality in any controller without to manually inject dependencies.
+Controller plugins offer the advantage of globally accessible functionality in any controller without manually injecting dependencies.
 Plugins should be used for functions that are common to any controller.
 Do not clutter controller's code with unnecessary plugins.
 
 ### Example
 
-First we create our desired plugin, for our example a string helper:
+First we create our desired plugin, for our example, a string helper:
 
 ```php
 class StringPlugin implements PluginInterface
@@ -58,7 +58,7 @@ Register the factory under the `['dot_controller']['plugin_manager']['factories'
 ]
 ```
 
-You don't need to register the plugin factory to a regular dependencies in a configuration because `AbstractPluginManager` actually extends `ServiceManager`.
+You don't need to register the plugin factory to a regular dependency in a configuration because `AbstractPluginManager` actually extends `ServiceManager`.
 Access it in a controller:
 
 ```php
@@ -67,9 +67,9 @@ $this->string(); // will return the StringPlugin class, so you can call any publ
 $this->string()->toUpper("test") // will return TEST
 ```
 
-## Build-in plugins
+## Built-in plugins
 
-The package comes in with 2 default plugins ``template`` and `url`.
+The package comes in with two default plugins `template` and `url`.
 You can use them in the same way as our example above.
 
 - `url` - the plugin is an instance of `Mezzio\Helper\UrlHelper`:

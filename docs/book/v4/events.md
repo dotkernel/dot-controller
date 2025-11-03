@@ -1,17 +1,21 @@
 # Events
 
-Dotkernel's controller package supports events and those events can be of 2 types: global events (middleware-like) or manually dispatch  events.
+Dotkernel's controller package supports events, and those events can be of two types: global events (middleware-like) or manually dispatched events.
 
 ## Getting started
 
-- Every event listener that is triggered from a controller needs to implement `Dot\Controller\Event\ControllerEventListenerInterface` which actually extends `Laminas\EventManager\ListenerAggregateInterface`.
+- Every event listener triggered from a controller needs to implement `Dot\Controller\Event\ControllerEventListenerInterface` which actually extends `Laminas\EventManager\ListenerAggregateInterface`.
 - You can add the trait `Dot\Controller\Event\ControllerEventListenerTrait` to override the method of the interface.
 - Every event listener needs to be registered under the `['dot_controller']['event_listenenrs]` key in the ConfigProvider, and every key must be the class that you want to attach the events
 
 ## Usage
 
-The events in a controller can be done in 2 different ways, a global way where an event is attached automatically to all the controllers action and works in the same way the middlewares works or a manually dispatchable way, where you can define to which controller the events is attached, and you can trigger the event where you want.
-For our example we have a UserController with some methods in it:
+The events in a controller can be done in two different ways:
+
+- a global way where an event is attached automatically to all the controller actions and works in the same way the middlewares works
+- in a manually dispatchable way, where you can define to which controller the events are attached, and you can trigger the event where you want
+
+For our example, we have a UserController with some methods in it:
 
 ```php
 use Dot\Controller\AbstractActionController;
@@ -36,9 +40,9 @@ class UserController extends AbstractActionController
 }
 ```
 
-### Example 1 - Global way
+### Global method
 
-First we will create the event listener:
+First, we will create the event listener:
 
 ```php
 use Dot\Controller\Event\ControllerEvent;
@@ -98,7 +102,7 @@ public function onAfterDispatch(ControllerEvent $e): void
 So every time the `updateAction` is accessed and the method is post, right after the action is dispatched, we can log that the user was updated.
 We can use the `onBeforeDispatch` in the same way, to log right before the user is updated.
 
-### Example 2 - Manually triggered way
+### Manual method
 
 ```php
 use Dot\Controller\Event\ControllerEvent;
@@ -128,7 +132,7 @@ class UserUpdatedListener implements ControllerEventListenerInterface
 }
 ```
 
-The `attach` method is from the `ListenerAggregateInterface` which `ControllerEventListenerTrait` already is overriding it so can be used in a global way with `onBeforeDispatch` and `onAfterDispatch` methods, but we can make our custom event and bind it to our method.
+The `attach` method is from the `ListenerAggregateInterface` which `ControllerEventListenerTrait` already is overriding it so can be used globally with `onBeforeDispatch` and `onAfterDispatch` methods, but we can make our custom event and bind it to our method.
 In this case we create attach an event called `user.profile.update` and bind it to the `userProfileUpdated` method.
 
 Next we need to register the event:
@@ -137,7 +141,7 @@ Next we need to register the event:
 'dot_controller' => [
     'event_listeners' => [
         AccountController::class => [
-            'user.profile.update' => UserUpdatedListener::class
+            'user.profile.update' => UserUpdatedListener::class,
         ]
     ]
 ]
@@ -147,7 +151,7 @@ Now you can manually trigger the event from the controller using build in `dispa
 
 ```php
 // UserController
-// post method for updating the user
+// POST method for updating the user
 public function updateAction()
 {
     // logic
