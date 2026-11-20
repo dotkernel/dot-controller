@@ -4,77 +4,87 @@ declare(strict_types=1);
 
 namespace DotTest\Controller\Factory;
 
-use Dot\Controller\AbstractController;
-use Dot\Controller\Factory\PluginManagerAwareInitializer as Subject;
+use Dot\Controller\Factory\PluginManagerAwareInitializer;
 use Dot\Controller\Plugin\PluginManager;
-use Dot\Controller\Plugin\PluginManagerAwareInterface;
-use Laminas\Diactoros\Response;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
+use DotTest\Controller\Fixture\InMemoryContainer;
+use DotTest\Controller\Fixture\TestController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
-use Psr\Http\Message\ResponseInterface;
+use stdClass;
 
 class PluginManagerAwareInitializerTest extends TestCase
 {
-    private Subject $subject;
-    private ContainerInterface|MockObject $container;
-    private PluginManager|MockObject $pluginManager;
+    private PluginManagerAwareInitializer $initializer;
 
-    /**
-     * @throws Exception
-     */
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->subject       = new Subject();
-        $this->container     = $this->createMock(ContainerInterface::class);
-        $this->pluginManager = $this->createMock(PluginManager::class);
+        $this->initializer = new PluginManagerAwareInitializer();
+    }
+
+    public function testSetsThePluginManager(): void
+    {
+        $container     = new InMemoryContainer();
+        $pluginManager = new PluginManager($container);
+        $container->set(PluginManager::class, $pluginManager);
+        $controller = new TestController();
+
+        ($this->initializer)($container, $controller);
+
+        $this->assertSame($pluginManager, $controller->getPluginManager());
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws Exception
+     * @return iterable<string, array{mixed, bool}>
      */
-    public function testInvokeSetsPluginManagerWhenInstanceIsPluginManagerAwareInterface(): void
+    public static function debugProvider(): iterable
     {
-        $this->container->expects($this->once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($this->pluginManager);
+        yield 'true'         => [true, true];
+        yield 'int 1'        => [1, true];
+        yield 'string 1'     => ['1', true];
+        yield 'string true'  => ['true', true];
+        yield 'false'        => [false, false];
+        yield 'int 0'        => [0, false];
+        yield 'string false' => ['false', false];
+        yield 'null'         => [null, false];
+    }
 
-        $instance = $this->createMock(PluginManagerAwareInterface::class);
+    #[DataProvider('debugProvider')]
+    public function testSetsTheDebugFlag(mixed $debug, bool $expected): void
+    {
+        $container  = $this->container(['debug' => $debug]);
+        $controller = new TestController();
 
-        $instance->expects($this->once())
-            ->method('setPluginManager')
-            ->with($this->equalTo($this->pluginManager));
+        ($this->initializer)($container, $controller);
 
-        $this->subject->__invoke($this->container, $instance);
+        $this->assertSame($expected, $controller->isDebug());
+    }
+
+    public function testMissingDebugKeyMeansFalse(): void
+    {
+        $controller = new TestController();
+        $controller->setDebug(true);
+
+        ($this->initializer)($this->container([]), $controller);
+
+        $this->assertFalse($controller->isDebug());
+    }
+
+    public function testIgnoresOtherInstances(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        ($this->initializer)(new InMemoryContainer(), new stdClass());
+        ($this->initializer)(new InMemoryContainer());
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @param array<string, mixed> $config
      */
-    public function testInvokeSetsDebugFlagWhenInstanceIsAbstractController(): void
+    private function container(array $config): InMemoryContainer
     {
-        $this->container->method('get')
-            ->willReturnMap([
-                [PluginManager::class, $this->pluginManager],
-                ['config', ['debug' => true]],
-            ]);
+        $container = new InMemoryContainer(['config' => $config]);
+        $container->set(PluginManager::class, new PluginManager($container));
 
-        $instance = new class extends AbstractController {
-            public function dispatch(): ResponseInterface
-            {
-                return new Response();
-            }
-        };
-
-        $this->subject->__invoke($this->container, $instance);
-
-        $this->assertTrue($instance->isDebug());
+        return $container;
     }
 }

@@ -6,8 +6,9 @@ namespace Dot\Controller;
 
 use Dot\Controller\Event\ControllerEvent;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
-use function array_merge;
+use function is_string;
 use function method_exists;
 use function strtolower;
 use function trim;
@@ -16,38 +17,44 @@ abstract class AbstractActionController extends AbstractController
 {
     public function dispatch(): ResponseInterface
     {
-        $action = strtolower(trim($this->request->getAttribute('action', 'index')));
-        if (empty($action)) {
+        $action = $this->request->getAttribute('action');
+        $action = is_string($action) ? strtolower(trim($action)) : '';
+        if ($action === '') {
             $action = 'index';
         }
 
         $action = AbstractController::getMethodFromAction($action);
 
-        if (method_exists($this, $action)) {
-            $r = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_BEFORE_DISPATCH, [
-                'request'    => $this->request,
-                'handler'    => $this->getHandler(),
-                'controller' => $this,
-                'method'     => $action,
-            ]);
-            if ($r instanceof ResponseInterface) {
-                return $r;
-            }
-
-            $this->request = $r->getParam('request');
-            $response      = $this->$action();
-            $params        = array_merge($r->getParams(), ['response' => $response]);
-
-            $r = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_AFTER_DISPATCH, $params);
-            if ($r instanceof ResponseInterface) {
-                return $r;
-            }
-
-            return $response;
+        if (! method_exists($this, $action)) {
+            // Go to the next middleware. If no middleware handles the request, the result is a 404 response.
+            return $this->getHandler()->handle($this->request);
         }
 
-        //just go the next middleware, it will eventually hit a 404 if no one handles the request
-        $handler = $this->getHandler();
-        return $handler->handle($this->request);
+        $event = $this->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_BEFORE_DISPATCH, [
+            'request'    => $this->request,
+            'handler'    => $this->getHandler(),
+            'controller' => $this,
+            'method'     => $action,
+        ]);
+        if ($event instanceof ResponseInterface) {
+            return $event;
+        }
+
+        $request = $event->getParam('request');
+        if ($request instanceof ServerRequestInterface) {
+            $this->request = $request;
+        }
+
+        $response = $this->$action();
+
+        $event = $this->dispatchEvent(
+            ControllerEvent::EVENT_CONTROLLER_AFTER_DISPATCH,
+            [...$event->getParams(), 'response' => $response]
+        );
+        if ($event instanceof ResponseInterface) {
+            return $event;
+        }
+
+        return $response;
     }
 }

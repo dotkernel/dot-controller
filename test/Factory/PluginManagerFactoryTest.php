@@ -4,96 +4,72 @@ declare(strict_types=1);
 
 namespace DotTest\Controller\Factory;
 
-use Dot\Controller\Factory\PluginManagerFactory as Subject;
-use Dot\Controller\Plugin\PluginManager;
+use Dot\Controller\Exception\InvalidArgumentException;
+use Dot\Controller\Factory\PluginManagerFactory;
 use Dot\Controller\Plugin\TemplatePlugin;
 use Dot\Controller\Plugin\UrlHelperPlugin;
+use DotTest\Controller\Fixture\InMemoryContainer;
+use DotTest\Controller\Fixture\StringPlugin;
+use DotTest\Controller\Fixture\StringPluginFactory;
 use Mezzio\Helper\UrlHelper;
 use Mezzio\Template\TemplateRendererInterface;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 class PluginManagerFactoryTest extends TestCase
 {
-    private Subject $subject;
-    private ContainerInterface|MockObject $container;
-    private TemplateRendererInterface|MockObject $templateRenderer;
-    private UrlHelper|MockObject $urlHelper;
-
-    /**
-     * @throws Exception
-     */
-    public function setUp(): void
+    public function testRegistersTheUrlPluginWhenTheHelperIsPresent(): void
     {
-        $this->subject          = new Subject();
-        $this->container        = $this->createMock(ContainerInterface::class);
-        $this->templateRenderer = $this->createMock(TemplateRendererInterface::class);
-        $this->urlHelper        = $this->createMock(UrlHelper::class);
-    }
+        $container = new InMemoryContainer([UrlHelper::class => $this->createStub(UrlHelper::class)]);
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function testInvokeWithUrlHelper(): void
-    {
-        $config = [
-            'dot_controller' => [
-                'plugin_manager' => [],
-            ],
-        ];
+        $pluginManager = (new PluginManagerFactory())($container);
 
-        $this->container->method('has')->willReturnMap([
-            [UrlHelper::class, true],
-            [TemplateRendererInterface::class, false],
-        ]);
-
-        $this->container->method('get')->willReturnMap([
-            [TemplateRendererInterface::class, $this->templateRenderer],
-            [UrlHelper::class, $this->urlHelper],
-            ['config', $config],
-        ]);
-
-        $pluginManager = $this->subject->__invoke($this->container);
-
-        $this->assertContainsOnlyInstancesOf(PluginManager::class, [$pluginManager]);
-        $this->assertTrue($pluginManager->has('url'));
-        $this->assertFalse($pluginManager->has('template'));
         $this->assertInstanceOf(UrlHelperPlugin::class, $pluginManager->get('url'));
+        $this->assertFalse($pluginManager->has('template'));
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function testInvokeWithTemplateRenderer(): void
+    public function testRegistersTheTemplatePluginWhenTheRendererIsPresent(): void
     {
-        $config = [
-            'dot_controller' => [
-                'plugin_manager' => [],
-            ],
-        ];
-
-        $this->container->method('has')->willReturnMap([
-            [UrlHelper::class, false],
-            [TemplateRendererInterface::class, true],
+        $container = new InMemoryContainer([
+            TemplateRendererInterface::class => $this->createStub(TemplateRendererInterface::class),
         ]);
 
-        $this->container->method('get')->willReturnMap([
-            [TemplateRendererInterface::class, $this->templateRenderer],
-            [UrlHelper::class, $this->urlHelper],
-            ['config', $config],
-        ]);
+        $pluginManager = (new PluginManagerFactory())($container);
 
-        $pluginManager = $this->subject->__invoke($this->container);
-
-        $this->assertContainsOnlyInstancesOf(PluginManager::class, [$pluginManager]);
-        $this->assertTrue($pluginManager->has('template'));
-        $this->assertFalse($pluginManager->has('url'));
         $this->assertInstanceOf(TemplatePlugin::class, $pluginManager->get('template'));
+        $this->assertFalse($pluginManager->has('url'));
+    }
+
+    public function testRegistersNoBuiltInPluginWithoutTheServices(): void
+    {
+        $pluginManager = (new PluginManagerFactory())(new InMemoryContainer());
+
+        $this->assertFalse($pluginManager->has('url'));
+        $this->assertFalse($pluginManager->has('template'));
+    }
+
+    public function testRegistersThePluginsFromTheConfig(): void
+    {
+        $container = new InMemoryContainer([
+            'config' => [
+                'dot_controller' => [
+                    'plugin_manager' => ['factories' => ['string' => StringPluginFactory::class]],
+                ],
+            ],
+        ]);
+
+        $pluginManager = (new PluginManagerFactory())($container);
+
+        $this->assertInstanceOf(StringPlugin::class, $pluginManager->get('string'));
+    }
+
+    public function testInvalidPluginManagerConfigThrows(): void
+    {
+        $container = new InMemoryContainer([
+            'config' => ['dot_controller' => ['plugin_manager' => 'invalid']],
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+
+        (new PluginManagerFactory())($container);
     }
 }

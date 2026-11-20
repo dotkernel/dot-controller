@@ -3,24 +3,35 @@
 This is Dotkernel's controller package that can be used like middleware inside Dotkernel or Mezzio application.
 It provides base classes for action-based controllers similar to a Laminas controller component.
 It is more lightweight, though, but supports controller plugins and event listeners.
+It works with any PSR-11 container.
 
 ## Documentation
 
 Documentation is available at: https://docs.dotkernel.org/dot-controller/.
 
+## Versions
+
+| Version | Supported | PHP versions |
+| --- | --- | --- |
+| 5.x | Yes | 8.3, 8.4, 8.5, 8.6 |
+| 4.x | Yes | 8.2, 8.3, 8.4, 8.5 |
+| 3.x | No | 8.2, 8.3, 8.4, 8.5 |
+
+To upgrade from 4.x, read the "Upgrading" page of the version 5 documentation.
+
 ## Badges
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-controller)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/4.2.0)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/5.0.0)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/network)
 [![GitHub stars](https://img.shields.io/github/stars/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/stargazers)
-[![GitHub license](https://img.shields.io/github/license/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/blob/4.0/LICENSE.md)
+[![GitHub license](https://img.shields.io/github/license/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/blob/5.0/LICENSE.md)
 
-[![Build Static](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml/badge.svg?branch=4.0)](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml)
+[![Build Static](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml/badge.svg?branch=5.0)](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml)
 [![codecov](https://codecov.io/gh/dotkernel/dot-controller/graph/badge.svg?token=VUBG5LM4CK)](https://codecov.io/gh/dotkernel/dot-controller)
-[![PHPStan](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml/badge.svg?branch=4.0)](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml)
+[![PHPStan](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml/badge.svg?branch=5.0)](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml)
 
 ## Installation
 
@@ -58,7 +69,7 @@ class UserController extends AbstractActionController
     {
         //...
     }
-    
+
     public function registerAction()
     {
         //...
@@ -91,4 +102,4 @@ In this case you can do the following:
 
 Now when a request for this route comes in, your controller will run first.
 Dotkernel controllers are designed to ignore requests that cannot be matched to one of its methods, so if no action matches, it will call the next middleware, in our case, the second controller.
-If this is the last controller, and the action does not match here, it will go to the default 404 Not found page (handled by NotFoundDelegate).
+If this is the last controller, and the action does not match here, it will go to the default 404 Not found page (handled by `NotFoundHandler`).

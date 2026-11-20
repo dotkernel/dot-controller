@@ -4,75 +4,159 @@ declare(strict_types=1);
 
 namespace DotTest\Controller\Factory;
 
-use Dot\Controller\AbstractController;
+use Dot\Controller\Event\ControllerEvent;
 use Dot\Controller\Event\ControllerEventListenerInterface;
-use Dot\Controller\Factory\ControllerEventListenersInitializer as Subject;
-use Laminas\EventManager\EventManager;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
+use Dot\Controller\Exception\RuntimeException;
+use Dot\Controller\Factory\ControllerEventListenersInitializer;
+use DotTest\Controller\Fixture\InMemoryContainer;
+use DotTest\Controller\Fixture\TestController;
+use DotTest\Controller\Fixture\TestListener;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use stdClass;
 
 class ControllerEventListenersInitializerTest extends TestCase
 {
-    private ContainerInterface|MockObject $container;
-    private AbstractController|MockObject $controller;
-    private EventManager|MockObject $eventManager;
-    private Subject $subject;
+    private ControllerEventListenersInitializer $initializer;
+    private TestController $controller;
 
-    /**
-     * @throws Exception
-     */
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->container    = $this->createMock(ContainerInterface::class);
-        $this->controller   = $this->createMock(AbstractController::class);
-        $this->eventManager = $this->createMock(EventManager::class);
-        $this->subject      = new Subject();
+        TestListener::reset();
+        $this->initializer = new ControllerEventListenersInitializer();
+        $this->controller  = new TestController();
+    }
+
+    public function testAttachesAListenerGivenAsClassName(): void
+    {
+        $this->initialize([TestController::class => [TestListener::class]]);
+
+        $this->assertSame(['before:indexAction', 'after'], $this->dispatch());
+    }
+
+    public function testAttachesAListenerGivenWithTypeAndPriority(): void
+    {
+        $this->initialize([TestController::class => [['type' => TestListener::class, 'priority' => '10']]]);
+        $this->controller->getEventManager()->attach(
+            ControllerEvent::EVENT_CONTROLLER_AFTER_DISPATCH,
+            static function (): void {
+                TestListener::$log[] = 'low';
+            },
+            1
+        );
+
+        $this->assertSame(['before:indexAction', 'after', 'low'], $this->dispatch());
+    }
+
+    public function testAttachesAListenerFromTheContainer(): void
+    {
+        $container = new InMemoryContainer([
+            'config'   => ['dot_controller' => ['event_listeners' => [TestController::class => ['listener']]]],
+            'listener' => new TestListener(),
+        ]);
+
+        ($this->initializer)($container, $this->controller);
+
+        $this->assertSame(['before:indexAction', 'after'], $this->dispatch());
+    }
+
+    public function testListenAllAttachesToEachController(): void
+    {
+        $this->initialize([ControllerEventListenerInterface::LISTEN_ALL => [TestListener::class]]);
+
+        $this->assertSame(['before:indexAction', 'after'], $this->dispatch());
+    }
+
+    public function testIgnoresListenersOfOtherControllers(): void
+    {
+        $this->initialize([stdClass::class => [TestListener::class]]);
+
+        $this->assertSame([], $this->dispatch());
+    }
+
+    public function testIgnoresInstancesThatAreNotControllers(): void
+    {
+        $container = new InMemoryContainer();
+
+        ($this->initializer)($container, new stdClass());
+
+        $this->assertSame([], $this->dispatch());
+    }
+
+    public function testConfigWithoutTheControllerKeyAttachesNothing(): void
+    {
+        ($this->initializer)(new InMemoryContainer(['config' => []]), $this->controller);
+        ($this->initializer)(new InMemoryContainer(), $this->controller);
+
+        $this->assertSame([], $this->dispatch());
+    }
+
+    public function testInvalidListenerListsAreSkipped(): void
+    {
+        ($this->initializer)(
+            new InMemoryContainer(['config' => ['dot_controller' => ['event_listeners' => 'invalid']]]),
+            $this->controller
+        );
+        $this->initialize([TestController::class => 'invalid']);
+
+        $this->assertSame([], $this->dispatch());
+    }
+
+    public function testEntryWithoutAValidTypeThrows(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('must name a listener class or service, int given');
+
+        $this->initialize([TestController::class => [['type' => 5]]]);
+    }
+
+    public function testEntryWithAnInvalidPriorityThrows(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('must be an integer, array given');
+
+        $this->initialize([TestController::class => [['type' => TestListener::class, 'priority' => []]]]);
+    }
+
+    public function testUnknownListenerThrows(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('but string was provided');
+
+        $this->initialize([TestController::class => ['UnknownListener']]);
+    }
+
+    public function testListenerOfTheWrongTypeThrows(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('but stdClass was provided');
+
+        $this->initialize([TestController::class => [stdClass::class]]);
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws Exception
+     * @param array<array-key, mixed> $listeners
      */
-    public function testAttachControllerListeners(): void
+    private function initialize(array $listeners): void
     {
-        $config = [
-            'dot_controller' => [
-                'event_listeners' => [
-                    AbstractController::class => [
-                        [
-                            'type'     => 'ListenerClass1',
-                            'priority' => 10,
-                        ],
-                        'ListenerClass2',
-                    ],
-                ],
-            ],
-        ];
-        $this->container->method('get')->with('config')->willReturn($config);
-
-        $this->container->method('has')->willReturnMap([
-            ['ListenerClass1', true],
-            ['ListenerClass2', true],
+        $container = new InMemoryContainer([
+            'config' => ['dot_controller' => ['event_listeners' => $listeners]],
         ]);
 
-        $this->container->method('get')->willReturnMap([
-            ['ListenerClass1', $this->createMock(ControllerEventListenerInterface::class)],
-            ['ListenerClass2', $this->createMock(ControllerEventListenerInterface::class)],
-        ]);
+        $this->initializer->attachControllerListeners($container, $this->controller);
+    }
 
-        $this->controller->method('getEventManager')->willReturn($this->eventManager);
+    /**
+     * @return list<string>
+     */
+    private function dispatch(): array
+    {
+        $before = $this->controller->dispatchEvent(
+            ControllerEvent::EVENT_CONTROLLER_BEFORE_DISPATCH,
+            ['method' => 'indexAction']
+        );
+        $this->assertInstanceOf(ControllerEvent::class, $before);
+        $this->controller->dispatchEvent(ControllerEvent::EVENT_CONTROLLER_AFTER_DISPATCH);
 
-        $this->eventManager->expects($this->any())->method('attach')
-            ->with($this->isInstanceOf(ControllerEventListenerInterface::class), 10);
-        $this->eventManager->expects($this->any())->method('attach')
-            ->with($this->isInstanceOf(ControllerEventListenerInterface::class), 1);
-
-        $this->expectNotToPerformAssertions();
-        $this->subject->attachControllerListeners($this->container, $this->controller);
+        return TestListener::$log;
     }
 }

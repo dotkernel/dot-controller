@@ -12,9 +12,10 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 use function class_exists;
-use function gettype;
+use function get_debug_type;
 use function is_array;
-use function is_object;
+use function is_int;
+use function is_numeric;
 use function is_string;
 use function sprintf;
 
@@ -23,6 +24,7 @@ class ControllerEventListenersInitializer
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws RuntimeException
      */
     public function __invoke(ContainerInterface $container, mixed $instance): void
     {
@@ -34,35 +36,48 @@ class ControllerEventListenersInitializer
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws RuntimeException
      */
     public function attachControllerListeners(ContainerInterface $container, AbstractController $controller): void
     {
-        $config = $container->get('config')['dot_controller'];
+        $config    = $container->has('config') ? $container->get('config') : [];
+        $listeners = is_array($config) ? ($config['dot_controller']['event_listeners'] ?? []) : [];
+        if (! is_array($listeners)) {
+            return;
+        }
 
-        if (isset($config['event_listeners']) && is_array($config['event_listeners'])) {
-            foreach ($config['event_listeners'] as $ctrl => $listeners) {
-                if (
-                    $controller::class === $ctrl
-                    || $ctrl === ControllerEventListenerInterface::LISTEN_ALL
-                ) {
-                    if (is_array($listeners)) {
-                        foreach ($listeners as $listenerConfig) {
-                            if (is_array($listenerConfig)) {
-                                $listener = $listenerConfig['type'] ?? '';
-                                $priority = (int) ($listenerConfig['priority'] ?? 1);
+        foreach ($listeners as $target => $entries) {
+            if ($target !== $controller::class && $target !== ControllerEventListenerInterface::LISTEN_ALL) {
+                continue;
+            }
+            if (! is_array($entries)) {
+                continue;
+            }
 
-                                $listener = $this->getControllerListener($container, $listener);
-                                $listener->attach($controller->getEventManager(), $priority);
-                            } elseif (is_string($listenerConfig)) {
-                                $listener = $listenerConfig;
-                                $priority = 1;
+            foreach ($entries as $entry) {
+                $name     = is_array($entry) ? ($entry['type'] ?? null) : $entry;
+                $priority = is_array($entry) ? ($entry['priority'] ?? 1) : 1;
 
-                                $listener = $this->getControllerListener($container, $listener);
-                                $listener->attach($controller->getEventManager(), $priority);
-                            }
-                        }
-                    }
+                if (! is_string($name) || $name === '') {
+                    throw new RuntimeException(sprintf(
+                        'Each controller event listener entry for `%s` must name a listener class or service,'
+                        . ' %s given',
+                        $controller::class,
+                        get_debug_type($name)
+                    ));
                 }
+                if (is_string($priority) && is_numeric($priority)) {
+                    $priority = (int) $priority;
+                }
+                if (! is_int($priority)) {
+                    throw new RuntimeException(sprintf(
+                        'The priority of controller event listener `%s` must be an integer, %s given',
+                        $name,
+                        get_debug_type($priority)
+                    ));
+                }
+
+                $this->getControllerListener($container, $name)->attach($controller->getEventManager(), $priority);
             }
         }
     }
@@ -70,16 +85,13 @@ class ControllerEventListenersInitializer
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws RuntimeException
      */
     protected function getControllerListener(
         ContainerInterface $container,
         string $listenerName
     ): ControllerEventListenerInterface {
-        $listener = $listenerName;
-        if ($container->has($listener)) {
-            $listener = $container->get($listener);
-        }
-
+        $listener = $container->has($listenerName) ? $container->get($listenerName) : $listenerName;
         if (is_string($listener) && class_exists($listener)) {
             $listener = new $listener();
         }
@@ -88,7 +100,7 @@ class ControllerEventListenersInitializer
             throw new RuntimeException(sprintf(
                 'Controller event listener must be an instance of %s, but %s was provided',
                 ControllerEventListenerInterface::class,
-                is_object($listener) ? $listener::class : gettype($listener)
+                get_debug_type($listener)
             ));
         }
 
