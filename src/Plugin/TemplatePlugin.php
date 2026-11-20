@@ -6,32 +6,40 @@ namespace Dot\Controller\Plugin;
 
 use Mezzio\Template\TemplateRendererInterface;
 
-use function func_get_args;
-
 class TemplatePlugin implements PluginInterface
 {
-    protected TemplateRendererInterface $template;
-
-    public function __construct(TemplateRendererInterface $template)
-    {
-        $this->template = $template;
+    public function __construct(
+        protected TemplateRendererInterface $template
+    ) {
     }
 
-    public function __invoke(?string $templateName = null, array $params = []): self|string
+    /**
+     * Without a template name, return the plugin. Otherwise, render the template.
+     *
+     * @param array<non-empty-string, mixed>|object $params
+     */
+    public function __invoke(?string $templateName = null, array|object $params = []): self|string
     {
-        $args = func_get_args();
-        if (empty($args)) {
+        if ($templateName === null || $templateName === '') {
             return $this;
         }
 
         return $this->render($templateName, $params);
     }
 
-    public function render(string $templateName, array $params = []): string
+    /**
+     * @param non-empty-string $templateName
+     * @param array<non-empty-string, mixed>|object $params
+     */
+    public function render(string $templateName, array|object $params = []): string
     {
         return $this->template->render($templateName, $params);
     }
 
+    /**
+     * @param non-empty-string $templateName
+     * @param non-empty-string $param
+     */
     public function addDefaultParam(string $templateName, string $param, mixed $value): void
     {
         $this->template->addDefaultParam($templateName, $param, $value);

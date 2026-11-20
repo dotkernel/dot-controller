@@ -4,9 +4,9 @@
 
 | Version | Supported          | PHP Version                                                                                                    |
 |---------|--------------------|----------------------------------------------------------------------------------------------------------------|
+| 5.x     | :white_check_mark: | ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/5.0.0) |
 | 4.x     | :white_check_mark: | ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/4.2.0) |
-| 3.x     | :white_check_mark: | ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-controller/3.6.0) |
-| <= 2.x  | :x:                |                                                                                                                |
+| <= 3.x  | :x:                |                                                                                                                |
 
 ## Reporting Potential Security Issues
 

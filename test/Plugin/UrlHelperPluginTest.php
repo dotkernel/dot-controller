@@ -4,66 +4,57 @@ declare(strict_types=1);
 
 namespace DotTest\Controller\Plugin;
 
-use Dot\Controller\Plugin\UrlHelperPlugin as Subject;
+use Dot\Controller\Plugin\UrlHelperPlugin;
 use Mezzio\Helper\UrlHelper;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UrlHelperPluginTest extends TestCase
 {
-    private UrlHelper|MockObject $urlHelper;
-    private Subject $subject;
-
-    /**
-     * @throws Exception
-     */
-    public function setUp(): void
+    public function testInvokeWithoutArgumentsReturnsThePlugin(): void
     {
-        $this->urlHelper = $this->createMock(UrlHelper::class);
-        $this->subject   = new Subject($this->urlHelper);
+        $plugin = new UrlHelperPlugin($this->createStub(UrlHelper::class));
+
+        $this->assertSame($plugin, $plugin());
     }
 
-    public function testInvokeWithoutArguments(): void
+    public function testInvokeWithArgumentsGeneratesTheUrl(): void
     {
-        $result = $this->subject->__invoke();
-
-        $this->assertInstanceOf(Subject::class, $result);
-    }
-
-    public function testInvokeWithArguments(): void
-    {
-        $routeName          = 'test.route';
-        $routeParams        = ['id' => 123];
-        $queryParams        = ['sort' => 'asc'];
-        $fragmentIdentifier = 'section';
-        $options            = ['absolute' => true];
-
-        $this->urlHelper->expects($this->once())
+        $helper = $this->createMock(UrlHelper::class);
+        $helper->expects($this->once())
             ->method('generate')
-            ->with($routeName, $routeParams, $queryParams, $fragmentIdentifier, $options)
-            ->willReturn('https://example.com/test-route?id=123&sort=asc#section');
+            ->with('test.route', ['id' => 123], ['sort' => 'asc'], 'section', ['reuse_result_params' => false])
+            ->willReturn('/test/123?sort=asc#section');
 
-        $result = $this->subject->__invoke($routeName, $routeParams, $queryParams, $fragmentIdentifier, $options);
+        $result = (new UrlHelperPlugin($helper))(
+            'test.route',
+            ['id' => 123],
+            ['sort' => 'asc'],
+            'section',
+            ['reuse_result_params' => false]
+        );
 
-        $this->assertSame('https://example.com/test-route?id=123&sort=asc#section', $result);
+        $this->assertSame('/test/123?sort=asc#section', $result);
+    }
+
+    public function testNullRouteNameMeansTheCurrentRoute(): void
+    {
+        $helper = $this->createMock(UrlHelper::class);
+        $helper->expects($this->once())
+            ->method('generate')
+            ->with(null, ['id' => 5], [], null, [])
+            ->willReturn('/current/5');
+
+        $this->assertSame('/current/5', (new UrlHelperPlugin($helper))(null, ['id' => 5]));
     }
 
     public function testGenerate(): void
     {
-        $routeName          = 'test.route';
-        $routeParams        = ['id' => 123];
-        $queryParams        = ['sort' => 'asc'];
-        $fragmentIdentifier = 'section';
-        $options            = ['absolute' => true];
-
-        $this->urlHelper->expects($this->once())
+        $helper = $this->createMock(UrlHelper::class);
+        $helper->expects($this->once())
             ->method('generate')
-            ->with($routeName, $routeParams, $queryParams, $fragmentIdentifier, $options)
-            ->willReturn('https://example.com/test-route?id=123&sort=asc#section');
+            ->with('test.route', [], [], null, [])
+            ->willReturn('/test');
 
-        $result = $this->subject->generate($routeName, $routeParams, $queryParams, $fragmentIdentifier, $options);
-
-        $this->assertSame('https://example.com/test-route?id=123&sort=asc#section', $result);
+        $this->assertSame('/test', (new UrlHelperPlugin($helper))->generate('test.route'));
     }
 }

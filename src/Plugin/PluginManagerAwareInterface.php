@@ -8,5 +8,5 @@ interface PluginManagerAwareInterface
 {
     public function setPluginManager(PluginManager $plugins): void;
 
-    public function getPluginManager(): ?PluginManager;
+    public function getPluginManager(): PluginManager;
 }

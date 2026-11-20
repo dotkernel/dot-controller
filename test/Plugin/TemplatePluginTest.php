@@ -4,73 +4,52 @@ declare(strict_types=1);
 
 namespace DotTest\Controller\Plugin;
 
-use Dot\Controller\Plugin\TemplatePlugin as Subject;
+use Dot\Controller\Plugin\TemplatePlugin;
 use Mezzio\Template\TemplateRendererInterface;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class TemplatePluginTest extends TestCase
 {
-    protected TemplateRendererInterface|MockObject $templateRenderer;
-    protected Subject $subject;
-
-    /**
-     * @throws Exception
-     */
-    protected function setup(): void
+    public function testInvokeWithoutArgumentsReturnsThePlugin(): void
     {
-        $this->templateRenderer = $this->createMock(TemplateRendererInterface::class);
-        $this->subject          = new Subject($this->templateRenderer);
+        $plugin = new TemplatePlugin($this->createStub(TemplateRendererInterface::class));
+
+        $this->assertSame($plugin, $plugin());
+        $this->assertSame($plugin, $plugin(null));
+        $this->assertSame($plugin, $plugin(''));
     }
 
-    public function testInvokeWithoutArguments(): void
+    public function testInvokeWithANameRendersTheTemplate(): void
     {
-        $result = $this->subject->__invoke();
-
-        $this->assertInstanceOf(Subject::class, $result);
-    }
-
-    public function testInvokeWithArguments(): void
-    {
-        $templateName = 'test-template';
-        $params       = ['param1' => 'value1', 'param2' => 'value2'];
-
-        $this->templateRenderer->expects($this->once())
+        $renderer = $this->createMock(TemplateRendererInterface::class);
+        $renderer->expects($this->once())
             ->method('render')
-            ->with($templateName, $params)
-            ->willReturn('<html><body>Test content</body></html>');
+            ->with('test::template', ['key' => 'value'])
+            ->willReturn('content');
 
-        $result = $this->subject->__invoke($templateName, $params);
-
-        $this->assertSame('<html><body>Test content</body></html>', $result);
+        $this->assertSame('content', (new TemplatePlugin($renderer))('test::template', ['key' => 'value']));
     }
 
-    public function testRender(): void
+    public function testRenderAcceptsAnObject(): void
     {
-        $templateName = 'test-template';
-        $params       = ['param1' => 'value1', 'param2' => 'value2'];
-
-        $this->templateRenderer->expects($this->once())
+        $params   = new stdClass();
+        $renderer = $this->createMock(TemplateRendererInterface::class);
+        $renderer->expects($this->once())
             ->method('render')
-            ->with($templateName, $params)
-            ->willReturn('<html><body>Test content</body></html>');
+            ->with('test::template', $params)
+            ->willReturn('content');
 
-        $result = $this->subject->render($templateName, $params);
-
-        $this->assertSame('<html><body>Test content</body></html>', $result);
+        $this->assertSame('content', (new TemplatePlugin($renderer))->render('test::template', $params));
     }
 
     public function testAddDefaultParam(): void
     {
-        $templateName = 'test-template';
-        $param        = 'defaultParam';
-        $value        = 'defaultValue';
-
-        $this->templateRenderer->expects($this->once())
+        $renderer = $this->createMock(TemplateRendererInterface::class);
+        $renderer->expects($this->once())
             ->method('addDefaultParam')
-            ->with($templateName, $param, $value);
+            ->with('test::template', 'key', 'value');
 
-        $this->subject->addDefaultParam($templateName, $param, $value);
+        (new TemplatePlugin($renderer))->addDefaultParam('test::template', 'key', 'value');
     }
 }

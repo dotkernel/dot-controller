@@ -16,7 +16,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-use function call_user_func_array;
 use function is_callable;
 use function lcfirst;
 use function sprintf;
@@ -71,38 +70,46 @@ abstract class AbstractController implements
     }
 
     /**
-     * Method overloading: return/call plugins
+     * Method overloading: return or call plugins
      *
-     * If the plugin is a functor, call it, passing the parameters provided.
+     * If the plugin is invokable, call it with the given parameters.
      * Otherwise, return the plugin instance.
+     *
+     * @param array<array-key, mixed> $params
+     * @throws ContainerExceptionInterface
      */
     public function __call(string $method, array $params): mixed
     {
         $plugin = $this->plugin($method);
         if (is_callable($plugin)) {
-            return call_user_func_array($plugin, $params);
+            return $plugin(...$params);
         }
+
         return $plugin;
     }
 
     /**
-     * Get plugin instance
+     * Create a new plugin instance on each call.
      *
+     * @param array<string, mixed> $options
      * @throws ContainerExceptionInterface
      */
-    public function plugin(string $name, array $options = []): PluginInterface|callable|null
+    public function plugin(string $name, array $options = []): PluginInterface
     {
-        return $this->getPluginManager()?->build($name, $options);
+        return $this->getPluginManager()->build($name, $options);
     }
 
-    public function getPluginManager(): ?PluginManager
+    /**
+     * @throws RuntimeException
+     */
+    public function getPluginManager(): PluginManager
     {
-        if (! $this->pluginManager) {
+        if ($this->pluginManager === null) {
             throw new RuntimeException(
                 sprintf(
                     'Controller plugin manager not set for controller `%s`.'
-                    . ' Enable the controller module by merging'
-                    . ' its ConfigProvider and make sure the controller is registered in the service manager',
+                    . ' Merge the ConfigProvider of dot-controller, register the controller in the container,'
+                    . ' and make sure that the container runs the PluginManagerAwareInitializer',
                     static::class
                 )
             );

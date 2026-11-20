@@ -28,10 +28,16 @@ trait ControllerEventListenerTrait
         );
     }
 
+    /**
+     * @param ControllerEvent<object|string|null, array<string, mixed>> $e
+     */
     public function onBeforeDispatch(ControllerEvent $e): void
     {
     }
 
+    /**
+     * @param ControllerEvent<object|string|null, array<string, mixed>> $e
+     */
     public function onAfterDispatch(ControllerEvent $e): void
     {
     }

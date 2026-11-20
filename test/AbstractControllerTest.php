@@ -4,131 +4,101 @@ declare(strict_types=1);
 
 namespace DotTest\Controller;
 
-use Dot\Controller\AbstractController as Subject;
+use Dot\Controller\Exception\PluginNotFoundException;
 use Dot\Controller\Exception\RuntimeException;
-use Dot\Controller\Plugin\PluginInterface;
 use Dot\Controller\Plugin\PluginManager;
-use Laminas\Diactoros\Response;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
+use DotTest\Controller\Fixture\InMemoryContainer;
+use DotTest\Controller\Fixture\PassThroughHandler;
+use DotTest\Controller\Fixture\PlainPlugin;
+use DotTest\Controller\Fixture\StringPluginFactory;
+use DotTest\Controller\Fixture\TestController;
+use Laminas\Diactoros\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 class AbstractControllerTest extends TestCase
 {
-    private PluginManager|MockObject $pluginManager;
-    private PluginInterface|MockObject $plugin;
-    private ServerRequestInterface|MockObject $request;
-    private RequestHandlerInterface|MockObject $handler;
-    private Subject $subject;
+    private TestController $controller;
+    private PluginManager $pluginManager;
 
-    /**
-     * @throws Exception
-     */
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->pluginManager = $this->createMock(PluginManager::class);
-        $this->plugin        = $this->createMock(PluginInterface::class);
-        $this->request       = $this->createMock(ServerRequestInterface::class);
-        $this->handler       = $this->createMock(RequestHandlerInterface::class);
-        $this->subject       = new class extends Subject {
-            public function dispatch(): ResponseInterface
-            {
-                return new Response();
-            }
-        };
+        $this->pluginManager = new PluginManager(new InMemoryContainer(), [
+            'factories' => [
+                'string' => StringPluginFactory::class,
+                'plain'  => static fn (): PlainPlugin => new PlainPlugin(),
+            ],
+        ]);
+        $this->controller    = new TestController();
     }
 
     public function testGetMethodFromAction(): void
     {
-        $testAction = 'test.this-action_name';
-        $method     = Subject::getMethodFromAction($testAction);
-        $this->assertSame('testThisActionNameAction', $method);
+        $this->assertSame('testThisActionNameAction', TestController::getMethodFromAction('test.this-action_name'));
     }
 
     public function testGetPluginManager(): void
     {
-        $this->subject->setPluginManager($this->pluginManager);
-        $this->assertInstanceOf(PluginManager::class, $this->subject->getPluginManager());
+        $this->controller->setPluginManager($this->pluginManager);
+
+        $this->assertSame($this->pluginManager, $this->controller->getPluginManager());
     }
 
     public function testNoPluginManager(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->subject->getPluginManager();
+        $this->expectExceptionMessage('Controller plugin manager not set');
+
+        $this->controller->getPluginManager();
     }
 
-    public function testGetRequest(): void
+    public function testProcessStoresTheRequestAndTheHandler(): void
     {
-        $this->subject->process($this->request, $this->handler);
-        $this->assertSame($this->request, $this->subject->getRequest());
-    }
+        $request = new ServerRequest();
+        $handler = new PassThroughHandler();
 
-    public function testGetHandler(): void
-    {
-        $this->subject->process($this->request, $this->handler);
-        $this->assertSame($this->handler, $this->subject->getHandler());
+        $this->controller->process($request, $handler);
+
+        $this->assertSame($request, $this->controller->getRequest());
+        $this->assertSame($handler, $this->controller->getHandler());
     }
 
     public function testDebug(): void
     {
-        $this->assertFalse($this->subject->isDebug());
+        $this->assertFalse($this->controller->isDebug());
 
-        $this->subject->setDebug(true);
-        $this->assertTrue($this->subject->isDebug());
+        $this->controller->setDebug(true);
+
+        $this->assertTrue($this->controller->isDebug());
     }
 
-    public function testCallPlugin(): void
+    public function testPluginCreatesANewInstanceOnEachCall(): void
     {
-        $this->pluginManager->expects($this->once())
-            ->method('build')
-            ->with('somePlugin')
-            ->willReturn($this->plugin);
+        $this->controller->setPluginManager($this->pluginManager);
 
-        $controller = new class ($this->pluginManager) extends Subject {
-            public function __construct(PluginManager $pluginManager)
-            {
-                $this->pluginManager = $pluginManager;
-            }
-
-            public function dispatch(): ResponseInterface
-            {
-                return new Response();
-            }
-        };
-
-        $plugin = $controller->somePlugin();
-
-        $this->assertInstanceOf(PluginInterface::class, $plugin);
+        $this->assertNotSame($this->controller->plugin('plain'), $this->controller->plugin('plain'));
     }
 
-    public function testCallCallablePlugin(): void
+    public function testMagicCallReturnsAPluginThatIsNotInvokable(): void
     {
-        $mockCallablePlugin = function ($param) {
-            return "Mock plugin called with parameter: $param";
-        };
+        $this->controller->setPluginManager($this->pluginManager);
 
-        $this->pluginManager->expects($this->once())
-            ->method('build')
-            ->with('callablePlugin')
-            ->willReturn($mockCallablePlugin);
+        $this->assertInstanceOf(PlainPlugin::class, $this->controller->__call('plain', []));
+    }
 
-        $this->subject = new class ($this->pluginManager) extends Subject {
-            public function __construct(PluginManager $pluginManager)
-            {
-                $this->pluginManager = $pluginManager;
-            }
+    public function testMagicCallInvokesAnInvokablePlugin(): void
+    {
+        $this->controller->setPluginManager($this->pluginManager);
 
-            public function dispatch(): ResponseInterface
-            {
-                return new Response();
-            }
-        };
+        $this->assertSame('TEST', $this->controller->__call('string', ['test']));
+    }
 
-        $result = $this->subject->callablePlugin('paramValue');
+    public function testMagicCallWithAnUnknownPluginThrows(): void
+    {
+        $this->controller->setPluginManager($this->pluginManager);
 
-        $this->assertSame('Mock plugin called with parameter: paramValue', $result);
+        $this->expectException(PluginNotFoundException::class);
+        $this->expectExceptionMessage('Controller plugin "unknown" is not registered.');
+
+        $this->controller->__call('unknown', []);
     }
 }

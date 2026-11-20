@@ -11,6 +11,11 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+use function filter_var;
+use function is_array;
+
+use const FILTER_VALIDATE_BOOLEAN;
+
 class PluginManagerAwareInitializer
 {
     /**
@@ -21,12 +26,16 @@ class PluginManagerAwareInitializer
     {
         if ($instance instanceof PluginManagerAwareInterface) {
             $pluginManager = $container->get(PluginManager::class);
-            $instance->setPluginManager($pluginManager);
+            if ($pluginManager instanceof PluginManager) {
+                $instance->setPluginManager($pluginManager);
+            }
         }
 
-        // we'll inject the debug flag here too, for now
+        // The debug flag is injected here too.
         if ($instance instanceof AbstractController) {
-            $instance->setDebug($container->get('config')['debug'] ?? false);
+            $config = $container->has('config') ? $container->get('config') : [];
+            $debug  = is_array($config) ? ($config['debug'] ?? false) : false;
+            $instance->setDebug(filter_var($debug, FILTER_VALIDATE_BOOLEAN));
         }
     }
 }

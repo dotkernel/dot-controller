@@ -11,6 +11,12 @@ use Dot\Controller\Plugin\PluginManager;
 
 class ConfigProvider
 {
+    /**
+     * @return array{
+     *     dependencies: array{factories: array<class-string, class-string>, initializers: list<class-string>},
+     *     dot_controller: array{plugin_manager: array<string, mixed>, event_listeners: array<array-key, mixed>},
+     * }
+     */
     public function __invoke(): array
     {
         return [
@@ -22,6 +28,9 @@ class ConfigProvider
         ];
     }
 
+    /**
+     * @return array{factories: array<class-string, class-string>, initializers: list<class-string>}
+     */
     public function getDependenciesConfig(): array
     {
         return [
