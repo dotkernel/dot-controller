@@ -9,6 +9,7 @@ use Dot\Controller\Factory\PluginManagerAwareInitializer as Subject;
 use Dot\Controller\Plugin\PluginManager;
 use Dot\Controller\Plugin\PluginManagerAwareInterface;
 use Laminas\Diactoros\Response;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +31,7 @@ class PluginManagerAwareInitializerTest extends TestCase
     {
         $this->subject       = new Subject();
         $this->container     = $this->createMock(ContainerInterface::class);
-        $this->pluginManager = $this->createMock(PluginManager::class);
+        $this->pluginManager = $this->createStub(PluginManager::class);
     }
 
     /**
@@ -58,6 +59,7 @@ class PluginManagerAwareInitializerTest extends TestCase
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testInvokeSetsDebugFlagWhenInstanceIsAbstractController(): void
     {
         $this->container->method('get')

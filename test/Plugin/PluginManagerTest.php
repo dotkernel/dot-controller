@@ -23,7 +23,7 @@ class PluginManagerTest extends TestCase
      */
     protected function setup(): void
     {
-        $this->container = $this->createMock(ContainerInterface::class);
+        $this->container = $this->createStub(ContainerInterface::class);
         $this->subject   = new Subject($this->container);
     }
 
@@ -33,7 +33,7 @@ class PluginManagerTest extends TestCase
      */
     public function testInstanceOf(): void
     {
-        $plugin = $this->createMock(PluginInterface::class);
+        $plugin = $this->createStub(PluginInterface::class);
         $this->expectNotToPerformAssertions();
         $this->subject->validate($plugin);
     }
