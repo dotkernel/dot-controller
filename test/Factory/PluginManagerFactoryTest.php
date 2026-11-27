@@ -30,9 +30,9 @@ class PluginManagerFactoryTest extends TestCase
     public function setUp(): void
     {
         $this->subject          = new Subject();
-        $this->container        = $this->createMock(ContainerInterface::class);
-        $this->templateRenderer = $this->createMock(TemplateRendererInterface::class);
-        $this->urlHelper        = $this->createMock(UrlHelper::class);
+        $this->container        = $this->createStub(ContainerInterface::class);
+        $this->templateRenderer = $this->createStub(TemplateRendererInterface::class);
+        $this->urlHelper        = $this->createStub(UrlHelper::class);
     }
 
     /**

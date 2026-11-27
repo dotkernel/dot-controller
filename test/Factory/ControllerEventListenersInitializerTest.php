@@ -10,6 +10,7 @@ use Dot\Controller\Factory\ControllerEventListenersInitializer as Subject;
 use Laminas\EventManager\EventManager;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -18,7 +19,7 @@ use Psr\Container\NotFoundExceptionInterface;
 class ControllerEventListenersInitializerTest extends TestCase
 {
     private ContainerInterface|MockObject $container;
-    private AbstractController|MockObject $controller;
+    private AbstractController|Stub $controller;
     private EventManager|MockObject $eventManager;
     private Subject $subject;
 
@@ -28,7 +29,7 @@ class ControllerEventListenersInitializerTest extends TestCase
     public function setUp(): void
     {
         $this->container    = $this->createMock(ContainerInterface::class);
-        $this->controller   = $this->createMock(AbstractController::class);
+        $this->controller   = $this->createStub(AbstractController::class);
         $this->eventManager = $this->createMock(EventManager::class);
         $this->subject      = new Subject();
     }
@@ -61,8 +62,8 @@ class ControllerEventListenersInitializerTest extends TestCase
         ]);
 
         $this->container->method('get')->willReturnMap([
-            ['ListenerClass1', $this->createMock(ControllerEventListenerInterface::class)],
-            ['ListenerClass2', $this->createMock(ControllerEventListenerInterface::class)],
+            ['ListenerClass1', $this->createStub(ControllerEventListenerInterface::class)],
+            ['ListenerClass2', $this->createStub(ControllerEventListenerInterface::class)],
         ]);
 
         $this->controller->method('getEventManager')->willReturn($this->eventManager);
@@ -72,7 +73,6 @@ class ControllerEventListenersInitializerTest extends TestCase
         $this->eventManager->expects($this->any())->method('attach')
             ->with($this->isInstanceOf(ControllerEventListenerInterface::class), 1);
 
-        $this->expectNotToPerformAssertions();
         $this->subject->attachControllerListeners($this->container, $this->controller);
     }
 }

@@ -9,6 +9,7 @@ use Dot\Controller\Exception\RuntimeException;
 use Dot\Controller\Plugin\PluginInterface;
 use Dot\Controller\Plugin\PluginManager;
 use Laminas\Diactoros\Response;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +17,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 class AbstractControllerTest extends TestCase
 {
     private PluginManager|MockObject $pluginManager;
@@ -30,9 +32,9 @@ class AbstractControllerTest extends TestCase
     public function setUp(): void
     {
         $this->pluginManager = $this->createMock(PluginManager::class);
-        $this->plugin        = $this->createMock(PluginInterface::class);
-        $this->request       = $this->createMock(ServerRequestInterface::class);
-        $this->handler       = $this->createMock(RequestHandlerInterface::class);
+        $this->plugin        = $this->createStub(PluginInterface::class);
+        $this->request       = $this->createStub(ServerRequestInterface::class);
+        $this->handler       = $this->createStub(RequestHandlerInterface::class);
         $this->subject       = new class extends Subject {
             public function dispatch(): ResponseInterface
             {

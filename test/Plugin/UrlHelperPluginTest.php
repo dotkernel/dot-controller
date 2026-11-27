@@ -6,6 +6,7 @@ namespace DotTest\Controller\Plugin;
 
 use Dot\Controller\Plugin\UrlHelperPlugin as Subject;
 use Mezzio\Helper\UrlHelper;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +25,7 @@ class UrlHelperPluginTest extends TestCase
         $this->subject   = new Subject($this->urlHelper);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testInvokeWithoutArguments(): void
     {
         $result = $this->subject->__invoke();

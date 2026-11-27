@@ -20,7 +20,7 @@ class AbstractActionControllerTest extends TestCase
     public function testNonExistingActionWillReturnResponse(): void
     {
         $request = $this->createMock(ServerRequestInterface::class);
-        $handler = $this->createMock(RequestHandlerInterface::class);
+        $handler = $this->createStub(RequestHandlerInterface::class);
 
         $request->expects($this->any())->method('getAttribute')->withAnyParameters()->willReturn('test');
 
@@ -37,7 +37,7 @@ class AbstractActionControllerTest extends TestCase
     public function testExistingActionWillReturnResponse(): void
     {
         $request = $this->createMock(ServerRequestInterface::class);
-        $handler = $this->createMock(RequestHandlerInterface::class);
+        $handler = $this->createStub(RequestHandlerInterface::class);
 
         $request->expects($this->any())->method('getAttribute')->withAnyParameters()->willReturn('index');
 
