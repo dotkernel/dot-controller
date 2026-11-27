@@ -14,6 +14,6 @@ It is more lightweight, though, but supports controller plugins and event listen
 [![GitHub stars](https://img.shields.io/github/stars/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/stargazers)
 [![GitHub license](https://img.shields.io/github/license/dotkernel/dot-controller)](https://github.com/dotkernel/dot-controller/blob/4.0/LICENSE.md)
 
-[![Build Static](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml/badge.svg?branch=4.0)](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml)
+[![Build Static](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml/badge.svg?branch=4.x)](https://github.com/dotkernel/dot-controller/actions/workflows/continuous-integration.yml)
 [![codecov](https://codecov.io/gh/dotkernel/dot-controller/graph/badge.svg?token=VUBG5LM4CK)](https://codecov.io/gh/dotkernel/dot-controller)
-[![PHPStan](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml/badge.svg?branch=4.0)](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml)
+[![PHPStan](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml/badge.svg?branch=4.x)](https://github.com/dotkernel/dot-controller/actions/workflows/static-analysis.yml)
